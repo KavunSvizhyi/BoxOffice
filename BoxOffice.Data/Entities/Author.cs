@@ -4,7 +4,10 @@ using System.Text;
 
 namespace BoxOffice.Data.Entities
 {
-    internal class Author
+    public class Author : BaseEntity
     {
+        public int PersonId { get; set; }
+        public Person Person { get; set; } = null!;
+        public ICollection<Perfomance> Perfomances { get; set; } = null!;
     }
 }

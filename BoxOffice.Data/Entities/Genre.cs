@@ -4,7 +4,9 @@ using System.Text;
 
 namespace BoxOffice.Data.Entities
 {
-    internal class Genre
+    public class Genre : BaseEntity
     {
+        public string GenreName { get; set; } = null!;
+        public ICollection<Perfomance> Perfomances { get; set; } = null!;
     }
 }
