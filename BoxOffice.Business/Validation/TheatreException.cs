@@ -4,7 +4,20 @@ using System.Text;
 
 namespace BoxOffice.Business.Validation
 {
-    internal class TheatreException
+    public class TheatreException : Exception
     {
+        public TheatreException()
+        {
+        }
+
+        public TheatreException(string message)
+            : base(message)
+        {
+        }
+
+        public TheatreException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }
