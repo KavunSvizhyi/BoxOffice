@@ -1,10 +1,16 @@
-﻿using System;
+﻿using BoxOffice.Business.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BoxOffice.Business.Interfaces
 {
-    internal class IPerfomanceService
+    public interface IPerfomanceService : IModelService<PerfomanceModel>
     {
+        Task<IEnumerable<PerfomanceModel>> GetByFilterAsync(SearchFilterModel filter);
+
+        Task<IEnumerable<PerfomanceModel>> GetAllAvailablePerfomances();
+
+        Task<IEnumerable<PerfomanceModel>> GetPerfomancesByCustomerId(int customerId);
     }
 }

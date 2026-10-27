@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BoxOffice.Business.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BoxOffice.Business.Interfaces
 {
-    internal class IGenreService
+    public interface IGenreService : IModelService<GenreModel>
     {
     }
 }
