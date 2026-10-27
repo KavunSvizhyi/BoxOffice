@@ -8,6 +8,6 @@ namespace BoxOffice.Data.Interfaces
     public interface IDeeplyDetailedRepository<TEntity> : IDetailedRepository<TEntity>
         where TEntity : BaseEntity
     {
-        Task<TEntity?> GetByIdWithDetailsAsync();
+        Task<TEntity?> GetByIdWithDetailsAsync(int id);
     }
 }
