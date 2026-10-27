@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BoxOffice.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BoxOffice.Data.Interfaces
 {
-    internal class ITicketBookingRepository
+    public interface ITicketBookingRepository : IDetailedRepository<TicketBooking>
     {
     }
 }
