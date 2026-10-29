@@ -11,9 +11,5 @@ namespace BoxOffice.Business.Models
         public string FullName { get; set; } = null!;
 
         public decimal SpendsOnTickets { get; set; }
-
-        public DateTime BirthDate { get; set; }
-
-        public ICollection<int> TiIds { get; set; } = null!;
     }
 }
