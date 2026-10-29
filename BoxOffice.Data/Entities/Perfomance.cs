@@ -5,10 +5,10 @@ using System.Text;
 
 namespace BoxOffice.Data.Entities
 {
-    public class Perfomance : BaseEntity
+    public class Performance : BaseEntity
     {
         [StringLength(50)]
-        public string PerfomanceName { get; set; } = null!;
+        public string PerformanceName { get; set; } = null!;
 
         public int AuthorId { get; set; }
 

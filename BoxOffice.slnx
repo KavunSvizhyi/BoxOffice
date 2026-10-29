@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="BoxOffice.Business/BoxOffice.Business.csproj" Id="a7cf3ce9-a8b1-4a7f-b3bf-b623b2acb8a5" />
   <Project Path="BoxOffice.Data/BoxOffice.Data.csproj" />
   <Project Path="BoxOffice/BoxOffice.csproj" />
 </Solution>

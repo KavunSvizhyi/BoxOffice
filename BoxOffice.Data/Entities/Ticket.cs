@@ -11,9 +11,9 @@ namespace BoxOffice.Data.Entities
         [StringLength(20)]
         public string SeatName { get; set; } = null!;
 
-        public int PerfomanceId { get; set; }
+        public int PerformanceId { get; set; }
 
-        public Perfomance Perfomance { get; set; } = null!;
+        public Performance Performance { get; set; } = null!;
 
         [Precision(18, 2)]
         public decimal Price { get; set; }
