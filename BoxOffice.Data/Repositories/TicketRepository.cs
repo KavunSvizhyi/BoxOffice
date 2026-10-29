@@ -45,6 +45,7 @@ namespace BoxOffice.Data.Repositories
         {
             return await _tickets
                 .Include(x => x.TicketBooking)
+                .Include(x => x.Perfomance)
                 .ToListAsync();
         }
 
@@ -57,6 +58,7 @@ namespace BoxOffice.Data.Repositories
         {
             return await _tickets
                 .Include(x => x.TicketBooking)
+                .Include(x => x.Perfomance)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

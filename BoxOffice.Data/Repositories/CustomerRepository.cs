@@ -47,6 +47,7 @@ namespace BoxOffice.Data.Repositories
                 .Include(x => x.Person)
                 .Include(x => x.TicketBookings)
                 .ThenInclude(x => x.Ticket)
+                .ThenInclude(x => x.Perfomance)
                 .ToListAsync();
         }
 
@@ -61,6 +62,7 @@ namespace BoxOffice.Data.Repositories
                 .Include(x => x.Person)
                 .Include(x => x.TicketBookings)
                 .ThenInclude(x => x.Ticket)
+                .ThenInclude(x => x.Perfomance)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
