@@ -36,6 +36,9 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 
 var app = builder.Build();
 
+app.UseHsts();
+app.UseHttpsRedirection();
+
 app.UseExceptionHandler();
 
 app.MapControllers();

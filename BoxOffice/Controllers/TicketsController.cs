@@ -71,9 +71,9 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost("bookings")]
-        public async Task<ActionResult<IEnumerable<TicketBookingModel>>> Post([FromBody] int id, [FromBody] int customerId)
+        public async Task<ActionResult<IEnumerable<TicketBookingModel>>> Post(TicketBookingModel model)
         {
-            var output = await _ticketService.BookTicketAsync(id, customerId);
+            var output = await _ticketService.BookTicketAsync(model.TicketId, model.CustomerId);
 
             return CreatedAtAction(nameof(this.GetBookingByTicketId), new { id = output.TicketId }, output);
         }
