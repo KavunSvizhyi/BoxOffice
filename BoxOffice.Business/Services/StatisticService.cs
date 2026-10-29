@@ -33,7 +33,7 @@ namespace BoxOffice.Business.Services
                 throw new TheatreException($"There is no such ID as {genreId}!");
             }
 
-            return genre.Perfomances
+            return genre.Performances
                 .SelectMany(p => p.Tickets)
                 .Where(t => t.TicketBooking is not null && 
                             t.TicketBooking.IsSold &&
@@ -49,7 +49,7 @@ namespace BoxOffice.Business.Services
                 throw new ArgumentException($"{nameof(count)} can only be a positive number!");
             }
 
-            var performanceGroups = (await _unitOfWork.PerfomanceRepository.GetAllWithDetailsAsync())
+            var performanceGroups = (await _unitOfWork.PerformanceRepository.GetAllWithDetailsAsync())
                 .GroupBy(p => new 
                 { 
                     p.AuthorId, 
@@ -64,7 +64,7 @@ namespace BoxOffice.Business.Services
                  .Where(t => t.TicketBooking != null && t.TicketBooking.IsSold)
                  .Sum(t => t.Price),
 
-                BestPerfomanceId = g.OrderByDescending(p => p.Tickets
+                BestPerformanceId = g.OrderByDescending(p => p.Tickets
                                         .Where(t => t.TicketBooking != null && t.TicketBooking.IsSold)
                                         .Sum(t => t.Price))
                          .Select(p => p.Id)

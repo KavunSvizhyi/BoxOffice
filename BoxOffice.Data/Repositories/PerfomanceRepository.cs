@@ -7,43 +7,43 @@ using System.Text;
 
 namespace BoxOffice.Data.Repositories
 {
-    public class PerfomanceRepository : IPerfomanceRepository
+    public class PerformanceRepository : IPerformanceRepository
     {
-        private readonly DbSet<Perfomance> _perfomances;
+        private readonly DbSet<Performance> _performances;
 
-        public PerfomanceRepository(DbSet<Perfomance> perfomances)
+        public PerformanceRepository(DbSet<Performance> performances)
         {
-            _perfomances = perfomances;
+            _performances = performances;
         }
 
-        public async Task AddAsync(Perfomance entity)
+        public async Task AddAsync(Performance entity)
         {
-            await _perfomances.AddAsync(entity);
+            await _performances.AddAsync(entity);
         }
 
-        public void Delete(Perfomance entity)
+        public void Delete(Performance entity)
         {
-            _perfomances.Remove(entity);
+            _performances.Remove(entity);
         }
 
         public async Task DeleteByIdAsync(int id)
         {
-            var perfomance = await _perfomances.FindAsync(id);
+            var performance = await _performances.FindAsync(id);
 
-            if (perfomance is not null)
+            if (performance is not null)
             {
-                _perfomances.Remove(perfomance);
+                _performances.Remove(performance);
             }
         }
 
-        public async Task<IEnumerable<Perfomance>> GetAllAsync()
+        public async Task<IEnumerable<Performance>> GetAllAsync()
         {
-            return await _perfomances.ToListAsync();
+            return await _performances.ToListAsync();
         }
 
-        public async Task<IEnumerable<Perfomance>> GetAllWithDetailsAsync()
+        public async Task<IEnumerable<Performance>> GetAllWithDetailsAsync()
         {
-            return await _perfomances
+            return await _performances
                 .Include(x => x.Author)
                 .ThenInclude(x => x!.Person)
                 .Include(x => x.Tickets)
@@ -52,14 +52,14 @@ namespace BoxOffice.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Perfomance?> GetByIdAsync(int id)
+        public async Task<Performance?> GetByIdAsync(int id)
         {
-            return await _perfomances.FindAsync(id);
+            return await _performances.FindAsync(id);
         }
 
-        public async Task<Perfomance?> GetByIdWithDetailsAsync(int id)
+        public async Task<Performance?> GetByIdWithDetailsAsync(int id)
         {
-            return await _perfomances
+            return await _performances
                 .Include(x => x.Author)
                 .ThenInclude(x => x!.Person)
                 .Include(x => x.Tickets)
@@ -68,9 +68,9 @@ namespace BoxOffice.Data.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Update(Perfomance entity)
+        public void Update(Performance entity)
         {
-            _perfomances.Update(entity);
+            _performances.Update(entity);
         }
     }
 }

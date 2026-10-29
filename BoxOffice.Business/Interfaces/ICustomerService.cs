@@ -7,6 +7,6 @@ namespace BoxOffice.Business.Interfaces
 {
     public interface ICustomerService : IModelService<CustomerModel>
     {
-        Task<IEnumerable<CustomerModel>> GetCustomersByPerfomanceIdAsync(int perfomanceId);
+        Task<IEnumerable<CustomerModel>> GetCustomersByPerformanceIdAsync(int performanceId);
     }
 }

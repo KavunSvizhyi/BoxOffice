@@ -97,15 +97,15 @@ namespace BoxOffice.Business.Services
             }
         }
 
-        public async Task<IEnumerable<CustomerModel>> GetCustomersByPerfomanceIdAsync(int perfomanceId)
+        public async Task<IEnumerable<CustomerModel>> GetCustomersByPerformanceIdAsync(int performanceId)
         {
-            var perfomance = await _unitOfWork.PerfomanceRepository.GetByIdWithDetailsAsync(perfomanceId);
-            if (perfomance is null)
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(performanceId);
+            if (performance is null)
             {
-                throw new TheatreException($"There is no such ID as {perfomanceId}!");
+                throw new TheatreException($"There is no such ID as {performanceId}!");
             }
 
-            var customers = perfomance.Tickets
+            var customers = performance.Tickets
                 .Where(t => t.TicketBooking is not null)
                 .Select(t => t.TicketBooking!.Customer);
 

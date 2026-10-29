@@ -17,6 +17,6 @@ namespace BoxOffice.Business.Interfaces
 
         Task<IEnumerable<TicketBookingModel>> GetBookingsByCustomerIdAsync(int customerId);
 
-        Task<IEnumerable<TicketModel>> GetAvailableTicketsByPerfomanceIdAsync(int perfomanceId);
+        Task<IEnumerable<TicketModel>> GetAvailableTicketsByPerformanceIdAsync(int performanceId);
     }
 }

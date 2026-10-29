@@ -6,7 +6,7 @@ namespace BoxOffice.Business.Models
 {
     public class SearchFilterModel
     {
-        public string? PerfomanceName { get; set; }
+        public string? PerformanceName { get; set; }
 
         public int? AuthorId { get; set; }
 

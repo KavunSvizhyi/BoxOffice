@@ -21,7 +21,7 @@ namespace BoxOffice.Data.Data
 
         public ICustomerRepository CustomerRepository => field ?? new CustomerRepository(_context.Customers);
 
-        public IPerfomanceRepository PerfomanceRepository => field ?? new PerfomanceRepository(_context.Perfomances);
+        public IPerformanceRepository PerformanceRepository => field ?? new PerformanceRepository(_context.Performances);
 
         public IGenreRepository GenreRepository => field ?? new GenreRepository(_context.Genres);
 

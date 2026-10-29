@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoxOffice.Data.Interfaces
 {
-    public interface IPerfomanceRepository : IDeeplyDetailedRepository<Perfomance>
+    public interface IPerformanceRepository : IDeeplyDetailedRepository<Performance>
     {
     }
 }

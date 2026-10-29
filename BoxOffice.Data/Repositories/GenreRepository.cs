@@ -44,7 +44,7 @@ namespace BoxOffice.Data.Repositories
         public async Task<IEnumerable<Genre>> GetAllWithDetailsAsync()
         {
             return await _genres
-                .Include(x => x.Perfomances)
+                .Include(x => x.Performances)
                 .ThenInclude(x => x.Tickets)
                 .ThenInclude(x => x.TicketBooking)
                 .ToListAsync();
@@ -58,7 +58,7 @@ namespace BoxOffice.Data.Repositories
         public async Task<Genre?> GetByIdWithDetailsAsync(int id)
         {
             return await _genres
-                .Include(x => x.Perfomances)
+                .Include(x => x.Performances)
                 .ThenInclude(x => x.Tickets)
                 .ThenInclude(x => x.TicketBooking)
                 .FirstOrDefaultAsync(x => x.Id == id);

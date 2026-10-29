@@ -10,6 +10,6 @@ namespace BoxOffice.Business.Models
 
         public string GenreName { get; set; } = null!;
 
-        public ICollection<int> PerfomanceIds { get; set; } = null!;
+        public ICollection<int> PerformanceIds { get; set; } = null!;
     }
 }

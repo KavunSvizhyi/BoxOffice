@@ -17,10 +17,10 @@ namespace BoxOffice.Business
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Person.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Person.LastName))
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.Person.BirthDate))
-                .ForMember(dest => dest.PerfomanceIds, opt => opt.MapFrom(src => src.Perfomances.Select(p => p.Id)))
+                .ForMember(dest => dest.PerformanceIds, opt => opt.MapFrom(src => src.Performances.Select(p => p.Id)))
                 .ReverseMap()
                 .ForMember(dest => dest.PersonId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Perfomances, opt => opt.Ignore())
+                .ForMember(dest => dest.Performances, opt => opt.Ignore())
                 .ForMember(dest => dest.Person, opt => opt.Ignore());
 
             CreateMap<Customer, CustomerModel>()
@@ -34,11 +34,11 @@ namespace BoxOffice.Business
                 .ForMember(dest => dest.Person, opt => opt.Ignore());
 
             CreateMap<Genre, GenreModel>()
-                .ForMember(dest => dest.PerfomanceIds, opt => opt.MapFrom(src => src.Perfomances.Select(p => p.Id)))
+                .ForMember(dest => dest.PerformanceIds, opt => opt.MapFrom(src => src.Performances.Select(p => p.Id)))
                 .ReverseMap()
-                .ForMember(dest => dest.Perfomances, opt => opt.Ignore());
+                .ForMember(dest => dest.Performances, opt => opt.Ignore());
 
-            CreateMap<Perfomance, PerfomanceModel>()
+            CreateMap<Performance, PerformanceModel>()
                 .ForMember(dest => dest.TicketIds, opt => opt.MapFrom(src => src.Tickets.Select(t => t.Id)))
                 .ReverseMap()
                 .ForMember(dest => dest.Tickets, opt => opt.Ignore());

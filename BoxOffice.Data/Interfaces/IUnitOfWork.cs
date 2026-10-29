@@ -9,7 +9,7 @@ namespace BoxOffice.Data.Interfaces
         IPersonRepository PersonRepository { get; }
         IAuthorRepository AuthorRepository { get; }
         ICustomerRepository CustomerRepository { get; }
-        IPerfomanceRepository PerfomanceRepository { get; }
+        IPerformanceRepository PerformanceRepository { get; }
         IGenreRepository GenreRepository { get; }
         ITicketRepository TicketRepository { get; }
         ITicketBookingRepository TicketBookingRepository { get; }

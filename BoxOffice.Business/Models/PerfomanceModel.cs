@@ -4,11 +4,11 @@ using System.Text;
 
 namespace BoxOffice.Business.Models
 {
-    public class PerfomanceModel
+    public class PerformanceModel
     {
         public int Id { get; set; }
 
-        public string PerfomanceName { get; set; } = null!;
+        public string PerformanceName { get; set; } = null!;
 
         public int AuthorId { get; set; }
 

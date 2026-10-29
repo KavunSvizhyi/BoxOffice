@@ -11,7 +11,7 @@ namespace BoxOffice.Data.Data
         public DbSet<Person> People { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Author> Authors { get; set; }
-        public DbSet<Perfomance> Perfomances { get; set; }
+        public DbSet<Performance> Performances { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketBooking> TicketBookings { get; set; }

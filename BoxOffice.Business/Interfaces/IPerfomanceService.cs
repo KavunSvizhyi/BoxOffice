@@ -5,12 +5,12 @@ using System.Text;
 
 namespace BoxOffice.Business.Interfaces
 {
-    public interface IPerfomanceService : IModelService<PerfomanceModel>
+    public interface IPerformanceService : IModelService<PerformanceModel>
     {
-        Task<IEnumerable<PerfomanceModel>> GetByFilterAsync(SearchFilterModel filter);
+        Task<IEnumerable<PerformanceModel>> GetByFilterAsync(SearchFilterModel filter);
 
-        Task<IEnumerable<PerfomanceModel>> GetAllAvailablePerfomancesAsync();
+        Task<IEnumerable<PerformanceModel>> GetAllAvailablePerformancesAsync();
 
-        Task<IEnumerable<PerfomanceModel>> GetPerfomancesByCustomerIdAsync(int customerId);
+        Task<IEnumerable<PerformanceModel>> GetPerformancesByCustomerIdAsync(int customerId);
     }
 }

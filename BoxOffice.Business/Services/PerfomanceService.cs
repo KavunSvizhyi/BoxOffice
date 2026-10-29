@@ -10,103 +10,103 @@ using System.Text;
 
 namespace BoxOffice.Business.Services
 {
-    public class PerfomanceService : IPerfomanceService
+    public class PerformanceService : IPerformanceService
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PerfomanceService(IMapper mapper, IUnitOfWork unitOfWork)
+        public PerformanceService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PerfomanceModel> AddAsync(PerfomanceModel model)
+        public async Task<PerformanceModel> AddAsync(PerformanceModel model)
         {
             await ValidateAsync(model);
 
-            var perfomance = _mapper.Map<Perfomance>(model);
-            await _unitOfWork.PerfomanceRepository.AddAsync(perfomance);
+            var performance = _mapper.Map<Performance>(model);
+            await _unitOfWork.PerformanceRepository.AddAsync(performance);
             await _unitOfWork.SaveAsync();
 
-            return _mapper.Map<PerfomanceModel>(perfomance);
+            return _mapper.Map<PerformanceModel>(performance);
         }
 
         public async Task DeleteAsync(int id)
         {
-            var perfomance = await _unitOfWork.PerfomanceRepository.GetByIdWithDetailsAsync(id);
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(id);
 
-            if (perfomance is not null &&
-                perfomance.Tickets.Count > 0)
+            if (performance is not null &&
+                performance.Tickets.Count > 0)
             {
-                throw new TheatreException($"Cannot delete the perfomance until a tickets to it exists (ID = {id})!");
+                throw new TheatreException($"Cannot delete the performance until a tickets to it exists (ID = {id})!");
             }
 
-            await _unitOfWork.PerfomanceRepository.DeleteByIdAsync(id);
+            await _unitOfWork.PerformanceRepository.DeleteByIdAsync(id);
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<PerfomanceModel>> GetAllAsync()
+        public async Task<IEnumerable<PerformanceModel>> GetAllAsync()
         {
-            var perfomances = await _unitOfWork.PerfomanceRepository.GetAllWithDetailsAsync();
+            var performances = await _unitOfWork.PerformanceRepository.GetAllWithDetailsAsync();
 
-            return _mapper.Map<IEnumerable<PerfomanceModel>>(perfomances);
+            return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
         }
 
-        public async Task<IEnumerable<PerfomanceModel>> GetAllAvailablePerfomancesAsync()
+        public async Task<IEnumerable<PerformanceModel>> GetAllAvailablePerformancesAsync()
         {
-            var perfomances = (await _unitOfWork.PerfomanceRepository.GetAllAsync())
+            var performances = (await _unitOfWork.PerformanceRepository.GetAllAsync())
                 .Where(p => p.EventDate > DateTime.Now);
 
-            return _mapper.Map<IEnumerable<PerfomanceModel>>(perfomances);
+            return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
         }
 
-        public async Task<IEnumerable<PerfomanceModel>> GetByFilterAsync(SearchFilterModel filter)
+        public async Task<IEnumerable<PerformanceModel>> GetByFilterAsync(SearchFilterModel filter)
         {
-            var perfomances = await _unitOfWork.PerfomanceRepository.GetAllAsync();
+            var performances = await _unitOfWork.PerformanceRepository.GetAllAsync();
 
-            if (filter.PerfomanceName is not null)
+            if (filter.PerformanceName is not null)
             {
-                perfomances = perfomances
-                    .Where(p => p.PerfomanceName
-                        .Contains(filter.PerfomanceName, StringComparison.InvariantCultureIgnoreCase));
+                performances = performances
+                    .Where(p => p.PerformanceName
+                        .Contains(filter.PerformanceName, StringComparison.InvariantCultureIgnoreCase));
             }
 
             if (filter.GenreId is not null)
             {
-                perfomances = perfomances
+                performances = performances
                     .Where(p => p.GenreId == filter.GenreId);
             }
 
             if (filter.AuthorId is not null)
             {
-                perfomances = perfomances
+                performances = performances
                     .Where(p => p.AuthorId == filter.AuthorId);
             }
 
             if (filter.StartDate is not null)
             {
-                perfomances = perfomances
+                performances = performances
                     .Where(p => p.EventDate >= filter.StartDate);
             }
 
             if (filter.EndDate is not null)
             {
-                perfomances = perfomances
+                performances = performances
                     .Where(p => p.EventDate <= filter.EndDate);
             }
 
-            return _mapper.Map<IEnumerable<PerfomanceModel>>(perfomances);
+            return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
         }
 
-        public async Task<PerfomanceModel?> GetByIdAsync(int id)
+        public async Task<PerformanceModel?> GetByIdAsync(int id)
         {
-            var perfomance = await _unitOfWork.PerfomanceRepository.GetByIdWithDetailsAsync(id);
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(id);
 
-            return _mapper.Map<PerfomanceModel>(perfomance);
+            return _mapper.Map<PerformanceModel>(performance);
         }
 
-        public async Task<IEnumerable<PerfomanceModel>> GetPerfomancesByCustomerIdAsync(int customerId)
+        public async Task<IEnumerable<PerformanceModel>> GetPerformancesByCustomerIdAsync(int customerId)
         {
             var customer = await _unitOfWork.CustomerRepository.GetByIdWithDetailsAsync(customerId);
             if (customer is null)
@@ -114,36 +114,36 @@ namespace BoxOffice.Business.Services
                 throw new TheatreException($"There is no such ID as {customerId}!");
             }
 
-            var perfomances = customer.TicketBookings.Select(t => t.Ticket.Perfomance);
+            var performances = customer.TicketBookings.Select(t => t.Ticket.Performance);
 
-            return _mapper.Map<IEnumerable<PerfomanceModel>>(perfomances);
+            return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
         }
 
-        public async Task UpdateAsync(PerfomanceModel model)
+        public async Task UpdateAsync(PerformanceModel model)
         {
             await ValidateAsync(model);
 
-            var perfomance = await _unitOfWork.PerfomanceRepository.GetByIdWithDetailsAsync(model.Id);
-            if (perfomance is null)
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(model.Id);
+            if (performance is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
             }
 
-            perfomance.PerfomanceName = model.PerfomanceName;
-            perfomance.EventDate = model.EventDate;
-            perfomance.AuthorId = model.AuthorId;
-            perfomance.GenreId = model.GenreId;
+            performance.PerformanceName = model.PerformanceName;
+            performance.EventDate = model.EventDate;
+            performance.AuthorId = model.AuthorId;
+            performance.GenreId = model.GenreId;
 
-            _unitOfWork.PerfomanceRepository.Update(perfomance);
+            _unitOfWork.PerformanceRepository.Update(performance);
             await _unitOfWork.SaveAsync();
         }
 
-        private async Task ValidateAsync(PerfomanceModel model)
+        private async Task ValidateAsync(PerformanceModel model)
         {
-            if (string.IsNullOrEmpty(model.PerfomanceName) ||
-                string.IsNullOrWhiteSpace(model.PerfomanceName))
+            if (string.IsNullOrEmpty(model.PerformanceName) ||
+                string.IsNullOrWhiteSpace(model.PerformanceName))
             {
-                throw new TheatreException($"{nameof(model.PerfomanceName)} cannot be blank!");
+                throw new TheatreException($"{nameof(model.PerformanceName)} cannot be blank!");
             }
 
             var genre = await _unitOfWork.GenreRepository.GetByIdAsync(model.GenreId);

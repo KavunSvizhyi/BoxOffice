@@ -10,6 +10,6 @@ namespace BoxOffice.Data.Entities
         [StringLength(50)]
         public string GenreName { get; set; } = null!;
 
-        public ICollection<Perfomance> Perfomances { get; set; } = null!;
+        public ICollection<Performance> Performances { get; set; } = null!;
     }
 }

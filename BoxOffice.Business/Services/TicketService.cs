@@ -99,9 +99,9 @@ namespace BoxOffice.Business.Services
 
         private static void ValidateSellingTheTicket(int id, Ticket ticket)
         {
-            if (ticket.Perfomance.EventDate < DateTime.Now)
+            if (ticket.Performance.EventDate < DateTime.Now)
             {
-                throw new TheatreException($"Cannot sell ticket to a perfomance, that already happend!");
+                throw new TheatreException($"Cannot sell ticket to a performance, that already happend!");
             }
             if (ticket.TicketBooking is null)
             {
@@ -133,20 +133,20 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<IEnumerable<TicketModel>>(tickets);
         }
 
-        public async Task<IEnumerable<TicketModel>> GetAvailableTicketsByPerfomanceIdAsync(int perfomanceId)
+        public async Task<IEnumerable<TicketModel>> GetAvailableTicketsByPerformanceIdAsync(int performanceId)
         {
-            var perfomance = await _unitOfWork.PerfomanceRepository.GetByIdWithDetailsAsync(perfomanceId);
-            if (perfomance is null)
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(performanceId);
+            if (performance is null)
             {
-                throw new TheatreException($"There is no such ID as {perfomanceId}!");
+                throw new TheatreException($"There is no such ID as {performanceId}!");
             }
 
-            if (perfomance.EventDate < DateTime.Now)
+            if (performance.EventDate < DateTime.Now)
             {
                 return [];
             }
 
-            var tickets = perfomance.Tickets.Where(t => t.TicketBooking is null);
+            var tickets = performance.Tickets.Where(t => t.TicketBooking is null);
 
             return _mapper.Map<IEnumerable<TicketModel>>(tickets);
         }
@@ -191,7 +191,7 @@ namespace BoxOffice.Business.Services
             }
 
             ticket.Price = model.Price;
-            ticket.PerfomanceId = model.PerfomanceId;
+            ticket.PerformanceId = model.PerformanceId;
             ticket.SeatName = model.SeatName;
 
             _unitOfWork.TicketRepository.Update(ticket);
@@ -211,10 +211,10 @@ namespace BoxOffice.Business.Services
                 throw new TheatreException($"{nameof(model.Price)} cannot be a negative number!");
             }
 
-            var perfomance = await _unitOfWork.PerfomanceRepository.GetByIdAsync(model.PerfomanceId);
-            if (perfomance is null)
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdAsync(model.PerformanceId);
+            if (performance is null)
             {
-                throw new TheatreException($"Perfomance with this {nameof(model.PerfomanceId)} doesn't exist!");
+                throw new TheatreException($"Performance with this {nameof(model.PerformanceId)} doesn't exist!");
             }
 
             if (model.TicketBookingId is not null)

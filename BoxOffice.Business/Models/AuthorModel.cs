@@ -14,6 +14,6 @@ namespace BoxOffice.Business.Models
 
         public DateTime BirthDate { get; set; }
 
-        public ICollection<int> PerfomanceIds { get; set; } = null!;
+        public ICollection<int> PerformanceIds { get; set; } = null!;
     }
 }

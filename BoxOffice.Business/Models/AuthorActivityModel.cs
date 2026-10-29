@@ -12,6 +12,6 @@ namespace BoxOffice.Business.Models
 
         public decimal IncomeSum { get; set; }
 
-        public int BestPerfomanceId { get; set; }
+        public int BestPerformanceId { get; set; }
     }
 }

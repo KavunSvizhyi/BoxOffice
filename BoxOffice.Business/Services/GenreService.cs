@@ -34,13 +34,13 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
-            bool IsAnyPerfomanceByGenre = 
-                (await _unitOfWork.PerfomanceRepository.GetAllAsync())
+            bool IsAnyPerformanceByGenre = 
+                (await _unitOfWork.PerformanceRepository.GetAllAsync())
                     .Any(p => p.GenreId == id);
 
-            if (IsAnyPerfomanceByGenre)
+            if (IsAnyPerformanceByGenre)
             {
-                throw new TheatreException("Cannot delete the genre until a perfomance with it exists!");
+                throw new TheatreException("Cannot delete the genre until a performance with it exists!");
             }
 
             await _unitOfWork.GenreRepository.DeleteByIdAsync(id);
