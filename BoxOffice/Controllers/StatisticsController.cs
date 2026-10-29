@@ -19,18 +19,37 @@ namespace BoxOffice.Controllers
         [HttpGet("most-successful-authors")]
         public async Task<ActionResult<IEnumerable<AuthorActivityModel>>> GetAuthors(int count)
         {
+            if (count <= 0)
+            {
+                return BadRequest($"{nameof(count)} can only be a positive number!");
+            }
+
             return Ok(await _statisticService.GetMostSuccessfulAuthorsAsync(count));
         }
 
         [HttpGet("most-valuable-customers")]
         public async Task<ActionResult<IEnumerable<CustomerActivityModel>>> GetCustomers(int count)
         {
+            if (count <= 0)
+            {
+                return BadRequest($"{nameof(count)} can only be a positive number!");
+            }
+
             return Ok(await _statisticService.GetMostValuableCustomersAsync(count));
         }
 
         [HttpGet("income-of-genre")]
         public async Task<ActionResult<IEnumerable<CustomerActivityModel>>> GetIncome(int count, DateTime startDate, DateTime endDate)
         {
+            if (count <= 0)
+            {
+                return BadRequest($"{nameof(count)} can only be a positive number!");
+            }
+            if (startDate > endDate)
+            {
+                return BadRequest($"{nameof(startDate)} cannot be after {endDate}!");
+            }
+
             return Ok(await _statisticService.GetIncomeOfGenreInPeriodAsync(count, startDate, endDate));
         }
     }
