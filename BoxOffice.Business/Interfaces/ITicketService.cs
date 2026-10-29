@@ -7,16 +7,16 @@ namespace BoxOffice.Business.Interfaces
 {
     public interface ITicketService : IModelService<TicketModel>
     {
-        Task<TicketBookingModel> BookTicket(int ticketId, int customerId);
+        Task<TicketBookingModel> BookTicketAsync(int ticketId, int customerId);
 
-        Task CancelBooking(int ticketId);
+        Task CancelBookingAsync(int ticketId);
 
-        Task<TicketBookingModel?> GetBookingDetails(int ticketId);
-
-        Task<decimal> GetTicketPriceAsync(int ticketId);
+        Task<TicketBookingModel?> GetBookingDetailsByTicketIdAsync(int ticketId);
 
         Task ChangeToSoldAsync(int ticketId);
 
-        Task<IEnumerable<TicketBookingModel>> GetBookingDetailsByPeriodAsync(DateTime startDate, DateTime endTime); 
+        Task<IEnumerable<TicketBookingModel>> GetBookingsByCustomerIdAsync(int customerId);
+
+        Task<IEnumerable<TicketModel>> GetAvailableTicketsByPerfomanceIdAsync(int perfomanceId);
     }
 }
