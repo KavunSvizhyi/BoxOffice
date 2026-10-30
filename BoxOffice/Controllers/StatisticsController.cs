@@ -38,19 +38,15 @@ namespace BoxOffice.Controllers
             return Ok(await _statisticService.GetMostValuableCustomersAsync(count));
         }
 
-        [HttpGet("income-of-genre")]
-        public async Task<ActionResult<IEnumerable<CustomerActivityModel>>> GetIncome(int count, DateTime startDate, DateTime endDate)
+        [HttpGet("income-of-genre/{genreId}")]
+        public async Task<ActionResult<IEnumerable<CustomerActivityModel>>> GetIncome(int genreId, DateTime startDate, DateTime endDate)
         {
-            if (count <= 0)
-            {
-                return BadRequest($"{nameof(count)} can only be a positive number!");
-            }
             if (startDate > endDate)
             {
                 return BadRequest($"{nameof(startDate)} cannot be after {endDate}!");
             }
 
-            return Ok(await _statisticService.GetIncomeOfGenreInPeriodAsync(count, startDate, endDate));
+            return Ok(await _statisticService.GetIncomeOfGenreInPeriodAsync(genreId, startDate, endDate));
         }
     }
 }
