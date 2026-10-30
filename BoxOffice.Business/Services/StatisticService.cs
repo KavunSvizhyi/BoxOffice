@@ -22,11 +22,6 @@ namespace BoxOffice.Business.Services
 
         public async Task<decimal> GetIncomeOfGenreInPeriodAsync(int genreId, DateTime startDate, DateTime endDate)
         {
-            if (startDate > endDate)
-            {
-                throw new ArgumentException();
-            }
-
             var genre = await _unitOfWork.GenreRepository.GetByIdWithDetailsAsync(genreId);
             if (genre is null)
             {
@@ -44,11 +39,6 @@ namespace BoxOffice.Business.Services
 
         public async Task<IEnumerable<AuthorActivityModel>> GetMostSuccessfulAuthorsAsync(int count)
         {
-            if (count <= 0)
-            {
-                throw new ArgumentException($"{nameof(count)} can only be a positive number!");
-            }
-
             var performanceGroups = (await _unitOfWork.PerformanceRepository.GetAllWithDetailsAsync())
                 .GroupBy(p => new 
                 { 
@@ -69,16 +59,11 @@ namespace BoxOffice.Business.Services
                                         .Sum(t => t.Price))
                          .Select(p => p.Id)
                          .FirstOrDefault()
-            }).Take(count);
+            }).OrderByDescending(c => c.IncomeSum).Take(count);
         }
 
         public async Task<IEnumerable<CustomerActivityModel>> GetMostValuableCustomersAsync(int count)
         {
-            if (count <= 0)
-            {
-                throw new ArgumentException($"{nameof(count)} can only be a positive number!");
-            }
-
             var customerGroups = (await _unitOfWork.CustomerRepository.GetAllWithDetailsAsync())
                 .GroupBy(c => new
                 {
@@ -92,7 +77,7 @@ namespace BoxOffice.Business.Services
                 FullName = g.Key.FullName,
                 SpendsOnTickets = g.SelectMany(p => p.TicketBookings)
                                    .Sum(t => t.Ticket.Price)
-            }).Take(count);
+            }).OrderByDescending(c => c.SpendsOnTickets).Take(count);
         }
     }
 }

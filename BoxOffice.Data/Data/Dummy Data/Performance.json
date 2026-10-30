@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "PerformanceName": "Hamlet",
+    "AuthorId": 1,
+    "GenreId": 4,
+    "EventDate": "2026-11-05T19:00:00"
+  },
+  {
+    "Id": 2,
+    "PerformanceName": "The Cherry Orchard",
+    "AuthorId": 2,
+    "GenreId": 1,
+    "EventDate": "2026-11-12T18:30:00"
+  },
+  {
+    "Id": 3,
+    "PerformanceName": "The Importance of Being Earnest",
+    "AuthorId": 3,
+    "GenreId": 2,
+    "EventDate": "2026-11-20T19:00:00"
+  },
+  {
+    "Id": 4,
+    "PerformanceName": "Death of a Salesman",
+    "AuthorId": 4,
+    "GenreId": 1,
+    "EventDate": "2026-12-01T19:30:00"
+  },
+  {
+    "Id": 5,
+    "PerformanceName": "A Midsummer Night's Dream",
+    "AuthorId": 1,
+    "GenreId": 2,
+    "EventDate": "2026-12-10T18:00:00"
+  },
+  {
+    "Id": 6,
+    "PerformanceName": "The Crucible",
+    "AuthorId": 4,
+    "GenreId": 4,
+    "EventDate": "2026-12-18T19:00:00"
+  }
+]
