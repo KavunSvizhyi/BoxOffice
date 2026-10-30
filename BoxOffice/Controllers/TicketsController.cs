@@ -90,6 +90,14 @@ namespace BoxOffice.Controllers
             return CreatedAtAction(nameof(this.GetBookingByTicketId), new { id = output.TicketId }, output);
         }
 
+        [HttpPost("sell/{id}")]
+        public async Task<IActionResult> Post(int id)
+        {
+            await _ticketService.ChangeToSoldAsync(id);
+
+            return NoContent();
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, TicketModel model)
         {
@@ -99,14 +107,6 @@ namespace BoxOffice.Controllers
             }
 
             await _ticketService.UpdateAsync(model);
-
-            return NoContent();
-        }
-
-        [HttpPatch("selling/{id}")]
-        public async Task<IActionResult> Patch(int id)
-        {
-            await _ticketService.ChangeToSoldAsync(id);
 
             return NoContent();
         }
