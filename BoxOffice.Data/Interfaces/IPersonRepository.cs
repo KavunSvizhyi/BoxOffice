@@ -7,5 +7,6 @@ namespace BoxOffice.Data.Interfaces
 {
     public interface IPersonRepository : IRepositoty<Person>
     {
+        public Task<Person?> GetByEmailAsync(string email);
     }
 }

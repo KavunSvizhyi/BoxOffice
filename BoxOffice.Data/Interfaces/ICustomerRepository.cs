@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoxOffice.Data.Interfaces
 {
-    public interface ICustomerRepository : IDeeplyDetailedRepository<Customer>
+    public interface ICustomerRepository : IWithPersonRepository<Customer>
     {
     }
 }
