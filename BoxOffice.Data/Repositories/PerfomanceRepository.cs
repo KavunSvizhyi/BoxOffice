@@ -38,12 +38,13 @@ namespace BoxOffice.Data.Repositories
 
         public async Task<IEnumerable<Performance>> GetAllAsync()
         {
-            return await _performances.ToListAsync();
+            return await _performances.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<Performance>> GetAllWithDetailsAsync()
         {
             return await _performances
+                .AsNoTracking()
                 .Include(x => x.Author)
                 .ThenInclude(x => x!.Person)
                 .Include(x => x.Tickets)
