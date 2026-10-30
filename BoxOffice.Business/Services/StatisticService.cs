@@ -59,7 +59,7 @@ namespace BoxOffice.Business.Services
                                         .Sum(t => t.Price))
                          .Select(p => p.Id)
                          .FirstOrDefault()
-            }).Take(count);
+            }).OrderByDescending(c => c.IncomeSum).Take(count);
         }
 
         public async Task<IEnumerable<CustomerActivityModel>> GetMostValuableCustomersAsync(int count)
@@ -77,7 +77,7 @@ namespace BoxOffice.Business.Services
                 FullName = g.Key.FullName,
                 SpendsOnTickets = g.SelectMany(p => p.TicketBookings)
                                    .Sum(t => t.Ticket.Price)
-            }).Take(count);
+            }).OrderByDescending(c => c.SpendsOnTickets).Take(count);
         }
     }
 }
