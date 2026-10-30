@@ -39,7 +39,7 @@ namespace BoxOffice.Controllers
         }
 
         [HttpGet("income-of-genre/{genreId}")]
-        public async Task<ActionResult<IEnumerable<CustomerActivityModel>>> GetIncome(int genreId, DateTime startDate, DateTime endDate)
+        public async Task<ActionResult<decimal>> GetIncome(int genreId, DateTime startDate, DateTime endDate)
         {
             if (startDate > endDate)
             {

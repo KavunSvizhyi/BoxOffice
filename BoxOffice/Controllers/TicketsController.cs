@@ -56,7 +56,7 @@ namespace BoxOffice.Controllers
         }
 
         [HttpGet("bookings/by-ticket/{id}")]
-        public async Task<ActionResult<TicketBookingModel>> GetBookingByTicketId(int id)
+        public async Task<ActionResult<TicketBookingModel?>> GetBookingByTicketId(int id)
         {
             var booking = await _ticketService.GetBookingDetailsByTicketIdAsync(id);
 
@@ -65,7 +65,7 @@ namespace BoxOffice.Controllers
                 return NotFound();
             }
 
-            return Ok(booking);
+            return Ok(await _ticketService.GetBookingDetailsByTicketIdAsync(id));
         }
 
         [HttpPost]
