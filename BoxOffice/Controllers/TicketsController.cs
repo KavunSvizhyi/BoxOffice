@@ -1,9 +1,13 @@
-﻿using BoxOffice.Business.Interfaces;
+﻿using AutoMapper;
+using Azure.Core;
+using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
 using BoxOffice.Business.Services;
 using BoxOffice.Data.Interfaces;
+using BoxOffice.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace BoxOffice.Controllers
 {
@@ -12,10 +16,12 @@ namespace BoxOffice.Controllers
     public class TicketsController : ControllerBase
     {
         private readonly ITicketService _ticketService;
+        private readonly IMapper _mapper;
 
-        public TicketsController(ITicketService ticketService)
+        public TicketsController(ITicketService ticketService, IMapper mapper)
         {
             _ticketService = ticketService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -63,16 +69,22 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<TicketModel>>> Post(TicketModel model)
+        public async Task<ActionResult<TicketPostResponse>> Post(AddTicketRequest request)
         {
+            var model = _mapper.Map<TicketModel>(request);
+
             var output = await _ticketService.AddAsync(model);
 
-            return CreatedAtAction(nameof(this.Get), new { id = output.Id }, output);
+            var response = _mapper.Map<TicketPostResponse>(output);
+
+            return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
 
         [HttpPost("bookings")]
-        public async Task<ActionResult<IEnumerable<TicketBookingModel>>> Post(TicketBookingModel model)
+        public async Task<ActionResult<TicketBookingModel>> Post(AddTicketBookingRequest request)
         {
+            var model = _mapper.Map<TicketBookingModel>(request);
+
             var output = await _ticketService.BookTicketAsync(model.TicketId, model.CustomerId);
 
             return CreatedAtAction(nameof(this.GetBookingByTicketId), new { id = output.TicketId }, output);

@@ -5,9 +5,9 @@ using Microsoft.Data.SqlClient;
 
 namespace BoxOffice.Business
 {
-    public class AutomapperProfile : Profile
+    public class BusinessLayerProfile : Profile
     {
-        public AutomapperProfile()
+        public BusinessLayerProfile()
         {
             CreateMap<AuthorModel, Person>();
 

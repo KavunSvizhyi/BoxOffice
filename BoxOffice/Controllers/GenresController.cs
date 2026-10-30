@@ -1,5 +1,9 @@
-﻿using BoxOffice.Business.Interfaces;
+﻿using AutoMapper;
+using Azure.Core;
+using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
+using BoxOffice.Business.Services;
+using BoxOffice.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoxOffice.Controllers
@@ -9,10 +13,12 @@ namespace BoxOffice.Controllers
     public class GenresController : ControllerBase
     {
         private readonly IGenreService _genreService;
+        private readonly IMapper _mapper;
 
-        public GenresController(IGenreService genreService)
+        public GenresController(IGenreService genreService, IMapper mapper)
         {
             _genreService = genreService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -35,11 +41,15 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<GenreModel>>> Post(GenreModel model)
+        public async Task<ActionResult<GenrePostResponse>> Post(AddGenreRequest request)
         {
+            var model = _mapper.Map<GenreModel>(request);
+
             var output = await _genreService.AddAsync(model);
 
-            return CreatedAtAction(nameof(this.Get), new { id = output.Id }, output);
+            var response = _mapper.Map<GenrePostResponse>(output);
+
+            return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
 
         [HttpPut("{id}")]

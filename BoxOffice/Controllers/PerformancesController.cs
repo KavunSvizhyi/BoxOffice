@@ -1,6 +1,8 @@
-﻿using BoxOffice.Business.Interfaces;
+﻿using AutoMapper;
+using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
 using BoxOffice.Business.Services;
+using BoxOffice.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +13,12 @@ namespace BoxOffice.Controllers
     public class PerformancesController : ControllerBase
     {
         private readonly IPerformanceService _performanceService;
+        private readonly IMapper _mapper;
 
-        public PerformancesController(IPerformanceService performanceService)
+        public PerformancesController(IPerformanceService performanceService, IMapper mapper)
         {
             _performanceService = performanceService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -55,11 +59,15 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<PerformanceModel>>> Post(PerformanceModel model)
+        public async Task<ActionResult<PerformancePostResponse>> Post(AddPerformanceRequest request)
         {
+            var model = _mapper.Map<PerformanceModel>(request);
+
             var output = await _performanceService.AddAsync(model);
 
-            return CreatedAtAction(nameof(this.Get), new { id = output.Id }, output);
+            var response = _mapper.Map<PerformancePostResponse>(output);
+
+            return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
 
         [HttpPut("{id}")]

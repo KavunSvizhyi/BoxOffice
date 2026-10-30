@@ -1,5 +1,7 @@
-﻿using BoxOffice.Business.Interfaces;
+﻿using AutoMapper;
+using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
+using BoxOffice.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoxOffice.Controllers
@@ -9,10 +11,12 @@ namespace BoxOffice.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorService _authorService;
+        private readonly IMapper _mapper;
 
-        public AuthorsController(IAuthorService authorService)
+        public AuthorsController(IAuthorService authorService, IMapper mapper)
         {
             _authorService = authorService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -35,11 +39,15 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> Post(AuthorModel model)
+        public async Task<ActionResult<AuthorPostResponse>> Post(AddPersonRequest request)
         {
+            var model = _mapper.Map<AuthorModel>(request);
+
             var output = await _authorService.AddAsync(model);
 
-            return CreatedAtAction(nameof(this.Get), new { id = output.Id }, output);
+            var response = _mapper.Map<AuthorPostResponse>(output);
+
+            return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
 
         [HttpPut("{id}")]

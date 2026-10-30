@@ -1,3 +1,4 @@
+using BoxOffice;
 using BoxOffice.Business;
 using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Services;
@@ -23,7 +24,8 @@ builder.Services.AddDbContext<TheatreDbContext>(options =>
 
 builder.Services.AddAutoMapper(cfg =>
 {
-    cfg.AddProfile<AutomapperProfile>();
+    cfg.AddProfile<BusinessLayerProfile>();
+    cfg.AddProfile<WebApiLayerProfile>();
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
