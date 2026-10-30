@@ -66,6 +66,13 @@ namespace BoxOffice.Data.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Author?> GetByPersonId(int personId)
+        {
+            return await _authors
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PersonId == personId);
+        }
+
         public void Update(Author entity)
         {
             _authors.Update(entity);

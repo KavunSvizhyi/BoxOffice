@@ -9,6 +9,6 @@ namespace BoxOffice.Data.Interfaces
         : IDeeplyDetailedRepository<TEntity> 
         where TEntity : BaseEntity
     {
-        Task<TEntity?> GetByPersonId(int id);
+        Task<TEntity?> GetByPersonId(int personId);
     }
 }
