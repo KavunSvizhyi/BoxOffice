@@ -27,8 +27,10 @@ namespace BoxOffice.Business.Services
 
             var person = _mapper.Map<Person>(model);
             await _unitOfWork.PersonRepository.AddAsync(person);
+            await _unitOfWork.SaveAsync();
 
             var author = _mapper.Map<Author>(model);
+            author.PersonId = person.Id;
             await _unitOfWork.AuthorRepository.AddAsync(author);
 
             await _unitOfWork.SaveAsync();

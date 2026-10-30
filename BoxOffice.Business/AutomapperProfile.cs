@@ -19,7 +19,6 @@ namespace BoxOffice.Business
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.Person.BirthDate))
                 .ForMember(dest => dest.PerformanceIds, opt => opt.MapFrom(src => src.Performances.Select(p => p.Id)))
                 .ReverseMap()
-                .ForMember(dest => dest.PersonId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Performances, opt => opt.Ignore())
                 .ForMember(dest => dest.Person, opt => opt.Ignore());
 
@@ -29,7 +28,6 @@ namespace BoxOffice.Business
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.Person.BirthDate))
                 .ForMember(dest => dest.TicketBookingIds, opt => opt.MapFrom(src => src.TicketBookings.Select(p => p.Id)))
                 .ReverseMap()
-                .ForMember(dest => dest.PersonId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.TicketBookings, opt => opt.Ignore())
                 .ForMember(dest => dest.Person, opt => opt.Ignore());
 
