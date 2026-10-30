@@ -10,7 +10,5 @@ namespace BoxOffice.Business.Interfaces
         Task<IEnumerable<PerformanceModel>> GetByFilterAsync(SearchFilterModel filter);
 
         Task<IEnumerable<PerformanceModel>> GetAllAvailablePerformancesAsync();
-
-        Task<IEnumerable<PerformanceModel>> GetPerformancesByCustomerIdAsync(int customerId);
     }
 }

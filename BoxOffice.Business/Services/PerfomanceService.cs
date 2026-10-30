@@ -39,7 +39,7 @@ namespace BoxOffice.Business.Services
             if (performance is not null &&
                 performance.Tickets.Count > 0)
             {
-                throw new TheatreException($"Cannot delete the performance until a tickets to it exists (ID = {id})!");
+                throw new TheatreException($"Cannot delete the performance until tickets to it exist (ID = {id})!");
             }
 
             await _unitOfWork.PerformanceRepository.DeleteByIdAsync(id);
@@ -104,19 +104,6 @@ namespace BoxOffice.Business.Services
             var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(id);
 
             return _mapper.Map<PerformanceModel>(performance);
-        }
-
-        public async Task<IEnumerable<PerformanceModel>> GetPerformancesByCustomerIdAsync(int customerId)
-        {
-            var customer = await _unitOfWork.CustomerRepository.GetByIdWithDetailsAsync(customerId);
-            if (customer is null)
-            {
-                throw new TheatreException($"There is no such ID as {customerId}!");
-            }
-
-            var performances = customer.TicketBookings.Select(t => t.Ticket.Performance);
-
-            return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
         }
 
         public async Task UpdateAsync(PerformanceModel model)

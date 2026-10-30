@@ -52,12 +52,6 @@ namespace BoxOffice.Controllers
             return Ok(await _performanceService.GetAllAvailablePerformancesAsync());
         }
 
-        [HttpGet("by-customer/{id}")]
-        public async Task<ActionResult<IEnumerable<PerformanceModel>>> GetByCustomer(int id)
-        {
-            return Ok(await _performanceService.GetPerformancesByCustomerIdAsync(id));
-        }
-
         [HttpPost]
         public async Task<ActionResult<PerformancePostResponse>> Post(AddPerformanceRequest request)
         {
