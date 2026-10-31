@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
-using BoxOffice.DTO;
+using BoxOffice.DTO.AddRequest;
+using BoxOffice.DTO.PostResponse;
+using BoxOffice.DTO.UpdateRequest;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoxOffice.Controllers
@@ -39,24 +41,26 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<AuthorPostResponse>> Post(AddPersonRequest request)
+        public async Task<ActionResult<PostPersonResponse>> Post(AddPersonRequest request)
         {
             var model = _mapper.Map<AuthorModel>(request);
 
             var output = await _authorService.AddAsync(model);
 
-            var response = _mapper.Map<AuthorPostResponse>(output);
+            var response = _mapper.Map<PostPersonResponse>(output);
 
             return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, AuthorModel model)
+        public async Task<IActionResult> Put(int id, UpdatePersonRequest request)
         {
-            if (model.Id != id)
+            if (request.Id != id)
             {
                 return BadRequest();
             }
+
+            var model = _mapper.Map<AuthorModel>(request);
 
             await _authorService.UpdateAsync(model);
 

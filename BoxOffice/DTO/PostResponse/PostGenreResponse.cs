@@ -1,6 +1,6 @@
-﻿namespace BoxOffice.DTO
+﻿namespace BoxOffice.DTO.PostResponse
 {
-    public class GenrePostResponse
+    public class PostGenreResponse
     {
         public int Id { get; set; }
 

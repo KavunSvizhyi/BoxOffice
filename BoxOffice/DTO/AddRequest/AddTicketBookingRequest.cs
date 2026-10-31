@@ -1,4 +1,4 @@
-﻿namespace BoxOffice.DTO
+﻿namespace BoxOffice.DTO.AddRequest
 {
     public class AddTicketBookingRequest
     {

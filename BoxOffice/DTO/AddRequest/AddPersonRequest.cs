@@ -1,9 +1,7 @@
-﻿namespace BoxOffice.DTO
+﻿namespace BoxOffice.DTO.AddRequest
 {
-    public class CustomerPostResponse
+    public class AddPersonRequest
     {
-        public int Id { get; set; }
-
         public string FirstName { get; set; } = null!;
 
         public string LastName { get; set; } = null!;

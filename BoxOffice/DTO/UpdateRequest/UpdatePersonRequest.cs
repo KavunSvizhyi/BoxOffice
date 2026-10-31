@@ -1,6 +1,6 @@
-﻿namespace BoxOffice.DTO
+﻿namespace BoxOffice.DTO.UpdateRequest
 {
-    public class AuthorPostResponse
+    public class UpdatePersonRequest
     {
         public int Id { get; set; }
 
@@ -8,8 +8,8 @@
 
         public string LastName { get; set; } = null!;
 
-        public DateTime BirthDate { get; set; }
-
         public string Email { get; set; } = null!;
+
+        public DateTime BirthDate { get; set; }
     }
 }
