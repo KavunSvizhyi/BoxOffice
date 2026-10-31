@@ -32,6 +32,28 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<PerformanceModel>(performance);
         }
 
+        private async Task ValidateAsync(PerformanceModel model)
+        {
+            if (string.IsNullOrEmpty(model.PerformanceName) ||
+                string.IsNullOrWhiteSpace(model.PerformanceName))
+            {
+                throw new TheatreException($"{nameof(model.PerformanceName)} cannot be blank!");
+            }
+
+            bool genreExists = await _unitOfWork.GenreRepository.ExistsByIdAsync(model.GenreId);
+            var authorExists = await _unitOfWork.AuthorRepository.ExistsByIdAsync(model.AuthorId);
+
+            if (genreExists)
+            {
+                throw new TheatreException($"Genre with this {nameof(model.GenreId)} doesn't exist!");
+            }
+
+            if (authorExists)
+            {
+                throw new TheatreException($"Author with this {nameof(model.AuthorId)} doesn't exist!");
+            }
+        }
+
         public async Task DeleteAsync(int id)
         {
             var performance = await ValidateDeletionAsync(id);
@@ -136,26 +158,5 @@ namespace BoxOffice.Business.Services
             await _unitOfWork.SaveAsync();
         }
 
-        private async Task ValidateAsync(PerformanceModel model)
-        {
-            if (string.IsNullOrEmpty(model.PerformanceName) ||
-                string.IsNullOrWhiteSpace(model.PerformanceName))
-            {
-                throw new TheatreException($"{nameof(model.PerformanceName)} cannot be blank!");
-            }
-
-            var genre = await _unitOfWork.GenreRepository.GetByIdAsync(model.GenreId);
-            var author = await _unitOfWork.AuthorRepository.GetByIdAsync(model.AuthorId);
-
-            if (genre is null)
-            {
-                throw new TheatreException($"Genre with this {nameof(model.GenreId)} doesn't exist!");
-            }
-
-            if (author is null)
-            {
-                throw new TheatreException($"Author with this {nameof(model.AuthorId)} doesn't exist!");
-            }
-        }
     }
 }
