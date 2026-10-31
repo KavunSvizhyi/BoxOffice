@@ -106,7 +106,7 @@ namespace BoxOffice.Business.Services
                 throw new TheatreException($"Cannot cancel an already sold ticket!");
             }
 
-            await _unitOfWork.TicketBookingRepository.DeleteByIdAsync(ticketBookingId);
+            _unitOfWork.TicketBookingRepository.Delete(booking);
             await _unitOfWork.SaveAsync();
         }
 
