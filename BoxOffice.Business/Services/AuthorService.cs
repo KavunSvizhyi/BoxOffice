@@ -94,6 +94,7 @@ namespace BoxOffice.Business.Services
             author.Person.FirstName = model.FirstName;
             author.Person.LastName = model.LastName;
             author.Person.BirthDate = model.BirthDate;
+            author.Person.Email = model.Email;
 
             await _unitOfWork.SaveAsync();
         }

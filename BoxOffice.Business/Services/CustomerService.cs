@@ -91,6 +91,7 @@ namespace BoxOffice.Business.Services
             customer.Person.FirstName = model.FirstName;
             customer.Person.LastName = model.LastName;
             customer.Person.BirthDate = model.BirthDate;
+            customer.Person.Email = model.Email;
 
             await _unitOfWork.SaveAsync();
         }
