@@ -35,7 +35,7 @@ namespace BoxOffice.Business.Services
             else
             {
                 bool isPersonAlreadyAuthor = await _unitOfWork.AuthorRepository.ExistsByPersonId(person.Id);
-                if (!isPersonAlreadyAuthor)
+                if (isPersonAlreadyAuthor)
                 {
                     throw new TheatreException("The author with this email is already in database!");
                 }

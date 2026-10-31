@@ -32,7 +32,7 @@ namespace BoxOffice.Business.Services
             else
             {
                 bool isPersonAlreadyCustomer = await _unitOfWork.CustomerRepository.ExistsByPersonId(person.Id);
-                if (!isPersonAlreadyCustomer)
+                if (isPersonAlreadyCustomer)
                 {
                     throw new TheatreException("The customer with this email is already in Database!");
                 }
