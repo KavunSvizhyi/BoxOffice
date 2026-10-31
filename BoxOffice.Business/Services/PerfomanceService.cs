@@ -41,14 +41,14 @@ namespace BoxOffice.Business.Services
             }
 
             bool genreExists = await _unitOfWork.GenreRepository.ExistsByIdAsync(model.GenreId);
-            var authorExists = await _unitOfWork.AuthorRepository.ExistsByIdAsync(model.AuthorId);
+            bool authorExists = await _unitOfWork.AuthorRepository.ExistsByIdAsync(model.AuthorId);
 
-            if (genreExists)
+            if (!genreExists)
             {
                 throw new TheatreException($"Genre with this {nameof(model.GenreId)} doesn't exist!");
             }
 
-            if (authorExists)
+            if (!authorExists)
             {
                 throw new TheatreException($"Author with this {nameof(model.AuthorId)} doesn't exist!");
             }
@@ -157,6 +157,5 @@ namespace BoxOffice.Business.Services
 
             await _unitOfWork.SaveAsync();
         }
-
     }
 }

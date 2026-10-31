@@ -32,6 +32,35 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<TicketModel>(ticket);
         }
 
+        private async Task ValidateAsync(TicketModel model)
+        {
+            if (string.IsNullOrEmpty(model.SeatName) ||
+                string.IsNullOrWhiteSpace(model.SeatName))
+            {
+                throw new TheatreException($"{nameof(model.SeatName)} cannot be blank!");
+            }
+
+            if (model.Price < 0)
+            {
+                throw new TheatreException($"{nameof(model.Price)} cannot be a negative number!");
+            }
+
+            bool performanceExists = await _unitOfWork.PerformanceRepository.ExistsByIdAsync(model.PerformanceId);
+            if (!performanceExists)
+            {
+                throw new TheatreException($"Performance with this {nameof(model.PerformanceId)} doesn't exist!");
+            }
+
+            if (model.TicketBookingId is not null)
+            {
+                bool bookingExists = await _unitOfWork.TicketBookingRepository.ExistsByIdAsync((int)model.TicketBookingId);
+                if (bookingExists)
+                {
+                    throw new TheatreException($"TicketBooking with this {nameof(model.TicketBookingId)} doesn't exist!");
+                }
+            }
+        }
+
         public async Task<TicketBookingModel> BookTicketAsync(int id, int customerId)
         {
             await ValidateBookingAsync(id, customerId);
@@ -196,35 +225,6 @@ namespace BoxOffice.Business.Services
 
             _unitOfWork.TicketRepository.Update(ticket);
             await _unitOfWork.SaveAsync();
-        }
-
-        private async Task ValidateAsync(TicketModel model)
-        {
-            if (string.IsNullOrEmpty(model.SeatName) ||
-                string.IsNullOrWhiteSpace(model.SeatName))
-            {
-                throw new TheatreException($"{nameof(model.SeatName)} cannot be blank!");
-            }
-
-            if (model.Price < 0)
-            {
-                throw new TheatreException($"{nameof(model.Price)} cannot be a negative number!");
-            }
-
-            var performance = await _unitOfWork.PerformanceRepository.GetByIdAsync(model.PerformanceId);
-            if (performance is null)
-            {
-                throw new TheatreException($"Performance with this {nameof(model.PerformanceId)} doesn't exist!");
-            }
-
-            if (model.TicketBookingId is not null)
-            {
-                var booking = await _unitOfWork.TicketBookingRepository.GetByIdAsync((int)model.TicketBookingId);
-                if (booking is null)
-                {
-                    throw new TheatreException($"TicketBooking with this {nameof(model.TicketBookingId)} doesn't exist!");
-                }
-            }
         }
     }
 }
