@@ -80,15 +80,15 @@ namespace BoxOffice.Business.Services
 
         private async Task ValidateBookingAsync(int id, int customerId)
         {
-            var ticket = _unitOfWork.TicketRepository.GetByIdAsync(id);
-            var customer = _unitOfWork.CustomerRepository.GetByIdAsync(customerId);
+            bool ticketExists = await _unitOfWork.TicketRepository.ExistsByIdAsync(id);
+            bool customerExists = await _unitOfWork.CustomerRepository.ExistsByIdAsync(customerId);
 
-            if (ticket is null)
+            if (!ticketExists)
             {
                 throw new TheatreException($"Ticket with this ID doesn't exist!");
             }
 
-            if (customer is null)
+            if (!customerExists)
             {
                 throw new TheatreException($"Customer with this ID doesn't exist!");
             }
