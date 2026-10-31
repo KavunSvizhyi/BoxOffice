@@ -25,6 +25,7 @@ namespace BoxOffice
             CreateMap<UpdateTicketRequest, TicketModel>();
 
             CreateMap<AuthorModel, PostPersonResponse>();
+            CreateMap<CustomerModel, PostPersonResponse>();
             CreateMap<GenreModel, PostGenreResponse>();
             CreateMap<PerformanceModel, PostPerformanceResponse>();
             CreateMap<TicketModel, PostTicketResponse>();
