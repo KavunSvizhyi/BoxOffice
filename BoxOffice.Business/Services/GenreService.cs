@@ -43,13 +43,13 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
-            await ValidateDeletion(id);
+            await ValidateDeletionAsync(id);
 
             await _unitOfWork.GenreRepository.DeleteByIdAsync(id);
             await _unitOfWork.SaveAsync();
         }
 
-        private async Task ValidateDeletion(int id)
+        private async Task ValidateDeletionAsync(int id)
         {
             bool exists = await _unitOfWork.GenreRepository.ExistsByIdAsync(id);
             if (!exists)
