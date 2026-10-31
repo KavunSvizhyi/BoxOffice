@@ -34,17 +34,26 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
-            bool IsAnyPerformanceByGenre = 
-                (await _unitOfWork.PerformanceRepository.GetAllAsync())
-                    .Any(p => p.GenreId == id);
-
-            if (IsAnyPerformanceByGenre)
-            {
-                throw new TheatreException("Cannot delete the genre until a performance with it exists!");
-            }
+            await ValidateDeletion(id);
 
             await _unitOfWork.GenreRepository.DeleteByIdAsync(id);
             await _unitOfWork.SaveAsync();
+        }
+
+        private async Task ValidateDeletion(int id)
+        {
+            bool exists = await _unitOfWork.GenreRepository.ExistsByIdAsync(id);
+            if (!exists)
+            {
+                throw new TheatreException($"There is no such ID as {id}!");
+            }
+
+            bool isAnyPerformanceByGenre = await _unitOfWork.PerformanceRepository.ExistsByGenreIdAsync(id);
+
+            if (isAnyPerformanceByGenre)
+            {
+                throw new TheatreException("Cannot delete the genre until a performance with it exists!");
+            }
         }
 
         public async Task<IEnumerable<GenreModel>> GetAllAsync()
