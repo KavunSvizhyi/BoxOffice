@@ -75,7 +75,7 @@ namespace BoxOffice.Business.Services
 
         public async Task<IEnumerable<PerformanceModel>> GetByFilterAsync(SearchFilterModel filter)
         {
-            var performances = await _unitOfWork.PerformanceRepository.GetAllAsync();
+            var performances = await _unitOfWork.PerformanceRepository.GetAllWithDetailsAsync();
 
             if (filter.PerformanceName is not null)
             {
