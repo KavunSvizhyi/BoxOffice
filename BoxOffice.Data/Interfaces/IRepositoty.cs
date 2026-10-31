@@ -9,6 +9,7 @@ namespace BoxOffice.Data.Interfaces
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity?> GetByIdAsync(int id);
+        Task<bool> ExistsByIdAsync(int id);
         Task AddAsync(TEntity entity);
         void Delete(TEntity entity);
         Task DeleteByIdAsync(int id);

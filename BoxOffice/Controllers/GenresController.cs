@@ -3,7 +3,9 @@ using Azure.Core;
 using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
 using BoxOffice.Business.Services;
-using BoxOffice.DTO;
+using BoxOffice.DTO.AddRequest;
+using BoxOffice.DTO.PostResponse;
+using BoxOffice.DTO.UpdateRequest;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoxOffice.Controllers
@@ -41,24 +43,26 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GenrePostResponse>> Post(AddGenreRequest request)
+        public async Task<ActionResult<PostGenreResponse>> Post(AddGenreRequest request)
         {
             var model = _mapper.Map<GenreModel>(request);
 
             var output = await _genreService.AddAsync(model);
 
-            var response = _mapper.Map<GenrePostResponse>(output);
+            var response = _mapper.Map<PostGenreResponse>(output);
 
             return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, GenreModel model)
+        public async Task<IActionResult> Put(int id, UpdateGenreRequest request)
         {
-            if (model.Id != id)
+            if (request.Id != id)
             {
                 return BadRequest();
             }
+
+            var model = _mapper.Map<GenreModel>(request);
 
             await _genreService.UpdateAsync(model);
 

@@ -38,7 +38,12 @@ namespace BoxOffice.Data.Repositories
 
         public async Task<IEnumerable<Person>> GetAllAsync()
         {
-            return await _people.ToListAsync();
+            return await _people.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<Person?> GetByEmailAsync(string email)
+        {
+            return await _people.FirstOrDefaultAsync(p => p.Email == email);
         }
 
         public async Task<Person?> GetByIdAsync(int id)
@@ -49,6 +54,11 @@ namespace BoxOffice.Data.Repositories
         public void Update(Person entity)
         {
             _people.Update(entity);
+        }
+
+        public async Task<bool> ExistsByIdAsync(int id)
+        {
+            return await _people.AnyAsync(x => x.Id == id);
         }
     }
 }

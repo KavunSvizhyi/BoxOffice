@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
 using BoxOffice.Business.Services;
-using BoxOffice.DTO;
+using BoxOffice.DTO.AddRequest;
+using BoxOffice.DTO.PostResponse;
+using BoxOffice.DTO.UpdateRequest;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,31 +55,27 @@ namespace BoxOffice.Controllers
             return Ok(await _performanceService.GetAllAvailablePerformancesAsync());
         }
 
-        [HttpGet("by-customer/{id}")]
-        public async Task<ActionResult<IEnumerable<PerformanceModel>>> GetByCustomer(int id)
-        {
-            return Ok(await _performanceService.GetPerformancesByCustomerIdAsync(id));
-        }
-
         [HttpPost]
-        public async Task<ActionResult<PerformancePostResponse>> Post(AddPerformanceRequest request)
+        public async Task<ActionResult<PostPerformanceResponse>> Post(AddPerformanceRequest request)
         {
             var model = _mapper.Map<PerformanceModel>(request);
 
             var output = await _performanceService.AddAsync(model);
 
-            var response = _mapper.Map<PerformancePostResponse>(output);
+            var response = _mapper.Map<PostPerformanceResponse>(output);
 
             return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, PerformanceModel model)
+        public async Task<IActionResult> Put(int id, UpdatePerformanceRequest request)
         {
-            if (model.Id != id)
+            if (request.Id != id)
             {
                 return BadRequest();
             }
+
+            var model = _mapper.Map<PerformanceModel>(request);
 
             await _performanceService.UpdateAsync(model);
 

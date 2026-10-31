@@ -38,12 +38,13 @@ namespace BoxOffice.Data.Repositories
 
         public async Task<IEnumerable<Author>> GetAllAsync()
         {
-            return await _authors.ToListAsync();
+            return await _authors.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<Author>> GetAllWithDetailsAsync()
         {
             return await _authors
+                .AsNoTracking()
                 .Include(x => x.Person)
                 .Include(x => x.Performances)
                 .ThenInclude(x => x.Tickets)
@@ -66,9 +67,19 @@ namespace BoxOffice.Data.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<bool> ExistsByPersonId(int personId)
+        {
+            return await _authors.AnyAsync(x => x.PersonId == personId);
+        }
+
         public void Update(Author entity)
         {
             _authors.Update(entity);
+        }
+
+        public async Task<bool> ExistsByIdAsync(int id)
+        {
+            return await _authors.AnyAsync(x => x.Id == id);
         }
     }
 }

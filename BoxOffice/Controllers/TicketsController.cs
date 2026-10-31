@@ -4,7 +4,9 @@ using BoxOffice.Business.Interfaces;
 using BoxOffice.Business.Models;
 using BoxOffice.Business.Services;
 using BoxOffice.Data.Interfaces;
-using BoxOffice.DTO;
+using BoxOffice.DTO.AddRequest;
+using BoxOffice.DTO.PostResponse;
+using BoxOffice.DTO.UpdateRequest;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
@@ -69,13 +71,13 @@ namespace BoxOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TicketPostResponse>> Post(AddTicketRequest request)
+        public async Task<ActionResult<PostTicketResponse>> Post(AddTicketRequest request)
         {
             var model = _mapper.Map<TicketModel>(request);
 
             var output = await _ticketService.AddAsync(model);
 
-            var response = _mapper.Map<TicketPostResponse>(output);
+            var response = _mapper.Map<PostTicketResponse>(output);
 
             return CreatedAtAction(nameof(this.Get), new { id = response.Id }, response);
         }
@@ -90,23 +92,25 @@ namespace BoxOffice.Controllers
             return CreatedAtAction(nameof(this.GetBookingByTicketId), new { id = output.TicketId }, output);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, TicketModel model)
+        [HttpPost("sell/{id}")]
+        public async Task<IActionResult> Post(int id)
         {
-            if (model.Id != id)
-            {
-                return BadRequest();
-            }
-
-            await _ticketService.UpdateAsync(model);
+            await _ticketService.ChangeToSoldAsync(id);
 
             return NoContent();
         }
 
-        [HttpPatch("selling/{id}")]
-        public async Task<IActionResult> Patch(int id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, UpdateTicketRequest request)
         {
-            await _ticketService.ChangeToSoldAsync(id);
+            if (request.Id != id)
+            {
+                return BadRequest();
+            }
+
+            var model = _mapper.Map<TicketModel>(request);
+
+            await _ticketService.UpdateAsync(model);
 
             return NoContent();
         }

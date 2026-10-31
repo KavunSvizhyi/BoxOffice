@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoxOffice.Data.Interfaces
 {
-    public interface IAuthorRepository : IDeeplyDetailedRepository<Author>
+    public interface IAuthorRepository : IWithPersonRepository<Author>
     {
     }
 }

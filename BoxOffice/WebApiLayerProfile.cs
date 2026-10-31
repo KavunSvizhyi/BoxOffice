@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BoxOffice.Business.Models;
 using BoxOffice.Data.Entities;
-using BoxOffice.DTO;
+using BoxOffice.DTO.AddRequest;
+using BoxOffice.DTO.PostResponse;
+using BoxOffice.DTO.UpdateRequest;
 
 namespace BoxOffice
 {
@@ -16,11 +18,17 @@ namespace BoxOffice
             CreateMap<AddTicketRequest, TicketModel>();
             CreateMap<AddTicketBookingRequest, TicketBookingModel>();
 
-            CreateMap<CustomerModel, CustomerPostResponse>();
-            CreateMap<AuthorModel, AuthorPostResponse>();
-            CreateMap<GenreModel, GenrePostResponse>();
-            CreateMap<PerformanceModel, PerformancePostResponse>();
-            CreateMap<TicketModel, TicketPostResponse>();
+            CreateMap<UpdatePersonRequest, CustomerModel>();
+            CreateMap<UpdatePersonRequest, AuthorModel>();
+            CreateMap<UpdateGenreRequest, GenreModel>();
+            CreateMap<UpdatePerformanceRequest, PerformanceModel>();
+            CreateMap<UpdateTicketRequest, TicketModel>();
+
+            CreateMap<AuthorModel, PostPersonResponse>();
+            CreateMap<CustomerModel, PostPersonResponse>();
+            CreateMap<GenreModel, PostGenreResponse>();
+            CreateMap<PerformanceModel, PostPerformanceResponse>();
+            CreateMap<TicketModel, PostTicketResponse>();
         }
     }
 }

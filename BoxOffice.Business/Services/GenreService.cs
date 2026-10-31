@@ -32,19 +32,37 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<GenreModel>(genre);
         }
 
+        private static void Validate(GenreModel model)
+        {
+            if (string.IsNullOrEmpty(model.GenreName) ||
+                string.IsNullOrWhiteSpace(model.GenreName))
+            {
+                throw new TheatreException($"{nameof(model.GenreName)} cannot be blank!");
+            }
+        }
+
         public async Task DeleteAsync(int id)
         {
-            bool IsAnyPerformanceByGenre = 
-                (await _unitOfWork.PerformanceRepository.GetAllAsync())
-                    .Any(p => p.GenreId == id);
-
-            if (IsAnyPerformanceByGenre)
-            {
-                throw new TheatreException("Cannot delete the genre until a performance with it exists!");
-            }
+            await ValidateDeletionAsync(id);
 
             await _unitOfWork.GenreRepository.DeleteByIdAsync(id);
             await _unitOfWork.SaveAsync();
+        }
+
+        private async Task ValidateDeletionAsync(int id)
+        {
+            bool exists = await _unitOfWork.GenreRepository.ExistsByIdAsync(id);
+            if (!exists)
+            {
+                throw new TheatreException($"There is no such ID as {id}!");
+            }
+
+            bool isAnyPerformanceByGenre = await _unitOfWork.PerformanceRepository.ExistsByGenreIdAsync(id);
+
+            if (isAnyPerformanceByGenre)
+            {
+                throw new TheatreException("Cannot delete the genre until a performance with it exists!");
+            }
         }
 
         public async Task<IEnumerable<GenreModel>> GetAllAsync()
@@ -65,7 +83,7 @@ namespace BoxOffice.Business.Services
         {
             Validate(model);
 
-            var genre = await _unitOfWork.GenreRepository.GetByIdWithDetailsAsync(model.Id);
+            var genre = await _unitOfWork.GenreRepository.GetByIdAsync(model.Id);
             if (genre is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
@@ -73,17 +91,8 @@ namespace BoxOffice.Business.Services
 
             genre.GenreName = model.GenreName;
 
-            _unitOfWork.GenreRepository.Update(genre);
             await _unitOfWork.SaveAsync();
         }
 
-        private static void Validate(GenreModel model)
-        {
-            if (string.IsNullOrEmpty(model.GenreName) ||
-                string.IsNullOrWhiteSpace(model.GenreName))
-            {
-                throw new TheatreException($"{nameof(model.GenreName)} cannot be blank!");
-            }
-        }
     }
 }

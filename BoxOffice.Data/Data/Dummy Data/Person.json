@@ -3,48 +3,56 @@
     "Id": 1,
     "FirstName": "William",
     "LastName": "Shakespeare",
-    "BirthDate": "1985-04-23T00:00:00"
+    "BirthDate": "1985-04-23T00:00:00",
+    "Email": "williamshakespeare@gmail.com"
   },
   {
     "Id": 2,
     "FirstName": "Anton",
-    "LastName": "Chekhov",
-    "BirthDate": "1990-01-29T00:00:00"
+    "LastName": "Bulba",
+    "BirthDate": "1990-01-29T00:00:00",
+    "Email": "antonbulba@gmail.com"
   },
   {
     "Id": 3,
     "FirstName": "Oscar",
     "LastName": "Wilde",
-    "BirthDate": "1982-10-16T00:00:00"
+    "BirthDate": "1982-10-16T00:00:00",
+    "Email": "oscarwilde@gmail.com"
   },
   {
     "Id": 4,
     "FirstName": "Arthur",
     "LastName": "Miller",
-    "BirthDate": "1978-10-17T00:00:00"
+    "BirthDate": "1978-10-17T00:00:00",
+    "Email": "arthurmiller@gmail.com"
   },
   {
     "Id": 5,
     "FirstName": "Emma",
     "LastName": "Johnson",
-    "BirthDate": "1995-05-14T00:00:00"
+    "BirthDate": "1995-05-14T00:00:00",
+    "Email": "emmajohnson@gmail.com"
   },
   {
     "Id": 6,
     "FirstName": "James",
     "LastName": "Smith",
-    "BirthDate": "1988-11-02T00:00:00"
+    "BirthDate": "1988-11-02T00:00:00",
+    "Email": "jamessmith@gmail.com"
   },
   {
     "Id": 7,
     "FirstName": "Olivia",
     "LastName": "Brown",
-    "BirthDate": "2000-01-30T00:00:00"
+    "BirthDate": "2000-01-30T00:00:00",
+    "Email": "oliviabrown@gmail.com"
   },
   {
     "Id": 8,
     "FirstName": "Daniel",
     "LastName": "Taylor",
-    "BirthDate": "1992-07-21T00:00:00"
+    "BirthDate": "1992-07-21T00:00:00",
+    "Email": "danieltaylor@gmail.com"
   }
 ]

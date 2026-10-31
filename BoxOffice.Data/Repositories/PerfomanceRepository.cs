@@ -38,17 +38,17 @@ namespace BoxOffice.Data.Repositories
 
         public async Task<IEnumerable<Performance>> GetAllAsync()
         {
-            return await _performances.ToListAsync();
+            return await _performances.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<Performance>> GetAllWithDetailsAsync()
         {
             return await _performances
+                .AsNoTracking()
                 .Include(x => x.Author)
                 .ThenInclude(x => x!.Person)
                 .Include(x => x.Tickets)
                 .ThenInclude(x => x.TicketBooking)
-                .ThenInclude(x => x!.Customer)
                 .ToListAsync();
         }
 
@@ -64,13 +64,22 @@ namespace BoxOffice.Data.Repositories
                 .ThenInclude(x => x!.Person)
                 .Include(x => x.Tickets)
                 .ThenInclude(x => x.TicketBooking)
-                .ThenInclude(x => x!.Customer)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(Performance entity)
         {
             _performances.Update(entity);
+        }
+
+        public async Task<bool> ExistsByIdAsync(int id)
+        {
+            return await _performances.AnyAsync(x => x.Id == id);
+        }
+
+        public async Task<bool> ExistsByGenreIdAsync(int genreId)
+        {
+            return await _performances.AnyAsync(x => x.GenreId == genreId);
         }
     }
 }

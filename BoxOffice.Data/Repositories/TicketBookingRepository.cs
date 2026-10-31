@@ -38,12 +38,13 @@ namespace BoxOffice.Data.Repositories
 
         public async Task<IEnumerable<TicketBooking>> GetAllAsync()
         {
-            return await _ticketBookings.ToListAsync();
+            return await _ticketBookings.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<TicketBooking>> GetAllWithDetailsAsync()
         {
             return await _ticketBookings
+                .AsNoTracking()
                 .Include(x => x.Customer)
                 .Include(x => x.Ticket)
                 .ToListAsync();
@@ -57,6 +58,11 @@ namespace BoxOffice.Data.Repositories
         public void Update(TicketBooking entity)
         {
             _ticketBookings.Update(entity);
+        }
+
+        public async Task<bool> ExistsByIdAsync(int id)
+        {
+            return await _ticketBookings.AnyAsync(x => x.Id == id);
         }
     }
 }

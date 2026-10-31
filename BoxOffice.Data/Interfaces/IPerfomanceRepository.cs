@@ -7,5 +7,6 @@ namespace BoxOffice.Data.Interfaces
 {
     public interface IPerformanceRepository : IDeeplyDetailedRepository<Performance>
     {
+        Task<bool> ExistsByGenreIdAsync(int genreId);
     }
 }

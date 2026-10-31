@@ -1,9 +1,7 @@
-﻿namespace BoxOffice.DTO
+﻿namespace BoxOffice.DTO.AddRequest
 {
-    public class PerformancePostResponse
+    public class AddPerformanceRequest
     {
-        public int Id { get; set; }
-
         public string PerformanceName { get; set; } = null!;
 
         public int AuthorId { get; set; }

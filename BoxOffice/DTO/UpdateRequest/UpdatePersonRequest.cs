@@ -1,10 +1,14 @@
-﻿namespace BoxOffice.DTO
+﻿namespace BoxOffice.DTO.UpdateRequest
 {
-    public class AddPersonRequest
+    public class UpdatePersonRequest
     {
+        public int Id { get; set; }
+
         public string FirstName { get; set; } = null!;
 
         public string LastName { get; set; } = null!;
+
+        public string Email { get; set; } = null!;
 
         public DateTime BirthDate { get; set; }
     }

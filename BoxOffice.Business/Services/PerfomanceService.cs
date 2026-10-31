@@ -32,18 +32,51 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<PerformanceModel>(performance);
         }
 
+        private async Task ValidateAsync(PerformanceModel model)
+        {
+            if (string.IsNullOrEmpty(model.PerformanceName) ||
+                string.IsNullOrWhiteSpace(model.PerformanceName))
+            {
+                throw new TheatreException($"{nameof(model.PerformanceName)} cannot be blank!");
+            }
+
+            bool genreExists = await _unitOfWork.GenreRepository.ExistsByIdAsync(model.GenreId);
+            bool authorExists = await _unitOfWork.AuthorRepository.ExistsByIdAsync(model.AuthorId);
+
+            if (!genreExists)
+            {
+                throw new TheatreException($"Genre with this {nameof(model.GenreId)} doesn't exist!");
+            }
+
+            if (!authorExists)
+            {
+                throw new TheatreException($"Author with this {nameof(model.AuthorId)} doesn't exist!");
+            }
+        }
+
         public async Task DeleteAsync(int id)
+        {
+            var performance = await ValidateDeletionAsync(id);
+
+            _unitOfWork.PerformanceRepository.Delete(performance);
+            await _unitOfWork.SaveAsync();
+        }
+
+        private async Task<Performance> ValidateDeletionAsync(int id)
         {
             var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(id);
 
-            if (performance is not null &&
-                performance.Tickets.Count > 0)
+            if (performance is null)
             {
-                throw new TheatreException($"Cannot delete the performance until a tickets to it exists (ID = {id})!");
+                throw new TheatreException($"There is no such ID as {id}!");
             }
 
-            await _unitOfWork.PerformanceRepository.DeleteByIdAsync(id);
-            await _unitOfWork.SaveAsync();
+            if (performance.Tickets.Count > 0)
+            {
+                throw new TheatreException($"Cannot delete the performance until tickets to it exist (ID = {id})!");
+            }
+
+            return performance;
         }
 
         public async Task<IEnumerable<PerformanceModel>> GetAllAsync()
@@ -55,15 +88,16 @@ namespace BoxOffice.Business.Services
 
         public async Task<IEnumerable<PerformanceModel>> GetAllAvailablePerformancesAsync()
         {
-            var performances = (await _unitOfWork.PerformanceRepository.GetAllAsync())
-                .Where(p => p.EventDate > DateTime.Now);
+            var performances = (await _unitOfWork.PerformanceRepository.GetAllWithDetailsAsync())
+                .Where(p => p.EventDate > DateTime.Now &&
+                            p.Tickets.Any(t => t.TicketBooking is null));
 
             return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
         }
 
         public async Task<IEnumerable<PerformanceModel>> GetByFilterAsync(SearchFilterModel filter)
         {
-            var performances = await _unitOfWork.PerformanceRepository.GetAllAsync();
+            var performances = await _unitOfWork.PerformanceRepository.GetAllWithDetailsAsync();
 
             if (filter.PerformanceName is not null)
             {
@@ -106,24 +140,11 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<PerformanceModel>(performance);
         }
 
-        public async Task<IEnumerable<PerformanceModel>> GetPerformancesByCustomerIdAsync(int customerId)
-        {
-            var customer = await _unitOfWork.CustomerRepository.GetByIdWithDetailsAsync(customerId);
-            if (customer is null)
-            {
-                throw new TheatreException($"There is no such ID as {customerId}!");
-            }
-
-            var performances = customer.TicketBookings.Select(t => t.Ticket.Performance);
-
-            return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
-        }
-
         public async Task UpdateAsync(PerformanceModel model)
         {
             await ValidateAsync(model);
 
-            var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(model.Id);
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdAsync(model.Id);
             if (performance is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
@@ -134,30 +155,7 @@ namespace BoxOffice.Business.Services
             performance.AuthorId = model.AuthorId;
             performance.GenreId = model.GenreId;
 
-            _unitOfWork.PerformanceRepository.Update(performance);
             await _unitOfWork.SaveAsync();
-        }
-
-        private async Task ValidateAsync(PerformanceModel model)
-        {
-            if (string.IsNullOrEmpty(model.PerformanceName) ||
-                string.IsNullOrWhiteSpace(model.PerformanceName))
-            {
-                throw new TheatreException($"{nameof(model.PerformanceName)} cannot be blank!");
-            }
-
-            var genre = await _unitOfWork.GenreRepository.GetByIdAsync(model.GenreId);
-            var author = await _unitOfWork.AuthorRepository.GetByIdAsync(model.AuthorId);
-
-            if (genre is null)
-            {
-                throw new TheatreException($"Genre with this {nameof(model.GenreId)} doesn't exist!");
-            }
-
-            if (author is null)
-            {
-                throw new TheatreException($"Author with this {nameof(model.AuthorId)} doesn't exist!");
-            }
         }
     }
 }

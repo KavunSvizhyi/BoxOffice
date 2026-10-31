@@ -34,6 +34,7 @@ namespace BoxOffice.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -146,14 +147,12 @@ namespace BoxOffice.Data.Migrations
                         name: "FK_TicketBookings_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_TicketBookings_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -169,17 +168,17 @@ namespace BoxOffice.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "People",
-                columns: new[] { "Id", "BirthDate", "FirstName", "LastName" },
+                columns: new[] { "Id", "BirthDate", "Email", "FirstName", "LastName" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1985, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "William", "Shakespeare" },
-                    { 2, new DateTime(1990, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anton", "Chekhov" },
-                    { 3, new DateTime(1982, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Oscar", "Wilde" },
-                    { 4, new DateTime(1978, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Arthur", "Miller" },
-                    { 5, new DateTime(1995, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Emma", "Johnson" },
-                    { 6, new DateTime(1988, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "James", "Smith" },
-                    { 7, new DateTime(2000, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Olivia", "Brown" },
-                    { 8, new DateTime(1992, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), "Daniel", "Taylor" }
+                    { 1, new DateTime(1985, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "williamshakespeare@gmail.com", "William", "Shakespeare" },
+                    { 2, new DateTime(1990, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "antonbulba@gmail.com", "Anton", "Bulba" },
+                    { 3, new DateTime(1982, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "oscarwilde@gmail.com", "Oscar", "Wilde" },
+                    { 4, new DateTime(1978, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "arthurmiller@gmail.com", "Arthur", "Miller" },
+                    { 5, new DateTime(1995, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "emmajohnson@gmail.com", "Emma", "Johnson" },
+                    { 6, new DateTime(1988, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "jamessmith@gmail.com", "James", "Smith" },
+                    { 7, new DateTime(2000, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "oliviabrown@gmail.com", "Olivia", "Brown" },
+                    { 8, new DateTime(1992, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), "danieltaylor@gmail.com", "Daniel", "Taylor" }
                 });
 
             migrationBuilder.InsertData(
@@ -258,6 +257,11 @@ namespace BoxOffice.Data.Migrations
                 name: "IX_Customers_PersonId",
                 table: "Customers",
                 column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_People_Email",
+                table: "People",
+                column: "Email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Performances_AuthorId",

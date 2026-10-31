@@ -25,15 +25,21 @@ namespace BoxOffice.Data.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Person>().HasIndex(x => x.Email);
+
             modelBuilder.Entity<TicketBooking>()
-                .HasOne(tb => tb.Customer)
-                .WithMany(c => c.TicketBookings)
-                .HasForeignKey(tb => tb.CustomerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(x => x.Customer)
+                .WithMany(x => x.TicketBookings)
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            // C:\Users\maksr\source\repos\BoxOffice\BoxOffice.Data\Data\Dummy Data\Person.json
+            modelBuilder.Entity<TicketBooking>()
+                .HasOne(x => x.Ticket)
+                .WithOne(x => x.TicketBooking)
+                .HasForeignKey<TicketBooking>(tb => tb.TicketId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             DirectoryInfo? projectDir = new DirectoryInfo(AppContext.BaseDirectory).Parent?.Parent?.Parent;
-
             string path = Path.Combine($"{projectDir!.FullName}.Data", "Data", "Dummy Data");
 
             modelBuilder.Entity<Person>()

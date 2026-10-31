@@ -32,6 +32,35 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<TicketModel>(ticket);
         }
 
+        private async Task ValidateAsync(TicketModel model)
+        {
+            if (string.IsNullOrEmpty(model.SeatName) ||
+                string.IsNullOrWhiteSpace(model.SeatName))
+            {
+                throw new TheatreException($"{nameof(model.SeatName)} cannot be blank!");
+            }
+
+            if (model.Price < 0)
+            {
+                throw new TheatreException($"{nameof(model.Price)} cannot be a negative number!");
+            }
+
+            bool performanceExists = await _unitOfWork.PerformanceRepository.ExistsByIdAsync(model.PerformanceId);
+            if (!performanceExists)
+            {
+                throw new TheatreException($"Performance with this {nameof(model.PerformanceId)} doesn't exist!");
+            }
+
+            if (model.TicketBookingId is not null)
+            {
+                bool bookingExists = await _unitOfWork.TicketBookingRepository.ExistsByIdAsync((int)model.TicketBookingId);
+                if (bookingExists)
+                {
+                    throw new TheatreException($"TicketBooking with this {nameof(model.TicketBookingId)} doesn't exist!");
+                }
+            }
+        }
+
         public async Task<TicketBookingModel> BookTicketAsync(int id, int customerId)
         {
             await ValidateBookingAsync(id, customerId);
@@ -51,15 +80,15 @@ namespace BoxOffice.Business.Services
 
         private async Task ValidateBookingAsync(int id, int customerId)
         {
-            var ticket = _unitOfWork.TicketRepository.GetByIdAsync(id);
-            var customer = _unitOfWork.CustomerRepository.GetByIdAsync(customerId);
+            bool ticketExists = await _unitOfWork.TicketRepository.ExistsByIdAsync(id);
+            bool customerExists = await _unitOfWork.CustomerRepository.ExistsByIdAsync(customerId);
 
-            if (ticket is null)
+            if (!ticketExists)
             {
                 throw new TheatreException($"Ticket with this ID doesn't exist!");
             }
 
-            if (customer is null)
+            if (!customerExists)
             {
                 throw new TheatreException($"Customer with this ID doesn't exist!");
             }
@@ -77,7 +106,7 @@ namespace BoxOffice.Business.Services
                 throw new TheatreException($"Cannot cancel an already sold ticket!");
             }
 
-            await _unitOfWork.TicketBookingRepository.DeleteByIdAsync(ticketBookingId);
+            _unitOfWork.TicketBookingRepository.Delete(booking);
             await _unitOfWork.SaveAsync();
         }
 
@@ -93,11 +122,10 @@ namespace BoxOffice.Business.Services
 
             ticket.TicketBooking!.IsSold = true;
 
-            _unitOfWork.TicketBookingRepository.Update(ticket.TicketBooking);
             await _unitOfWork.SaveAsync();
         }
 
-        private static void ValidateSellingTheTicket(int id, Ticket ticket)
+        private void ValidateSellingTheTicket(int id, Ticket ticket)
         {
             if (ticket.Performance.EventDate < DateTime.Now)
             {
@@ -115,15 +143,26 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
+            var ticket = await ValidateDeletionAsync(id);
+
+            _unitOfWork.TicketRepository.Delete(ticket);
+            await _unitOfWork.SaveAsync();
+        }
+
+        private async Task<Ticket> ValidateDeletionAsync(int id)
+        {
             var ticket = await _unitOfWork.TicketRepository.GetByIdWithDetailsAsync(id);
-            if (ticket is not null &&
-                ticket.TicketBooking is not null)
+
+            if (ticket is null)
+            {
+                throw new TheatreException($"There is no such ID as {id}!");
+            }
+            if (ticket.TicketBooking is not null)
             {
                 throw new TheatreException($"Cannot delete a booked ticket (ID = {id})!");
             }
 
-            await _unitOfWork.TicketRepository.DeleteByIdAsync(id);
-            await _unitOfWork.SaveAsync();
+            return ticket;
         }
 
         public async Task<IEnumerable<TicketModel>> GetAllAsync()
@@ -184,7 +223,7 @@ namespace BoxOffice.Business.Services
         {
             await ValidateAsync(model);
 
-            var ticket = await _unitOfWork.TicketRepository.GetByIdWithDetailsAsync(model.Id);
+            var ticket = await _unitOfWork.TicketRepository.GetByIdAsync(model.Id);
             if (ticket is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
@@ -194,37 +233,7 @@ namespace BoxOffice.Business.Services
             ticket.PerformanceId = model.PerformanceId;
             ticket.SeatName = model.SeatName;
 
-            _unitOfWork.TicketRepository.Update(ticket);
             await _unitOfWork.SaveAsync();
-        }
-
-        private async Task ValidateAsync(TicketModel model)
-        {
-            if (string.IsNullOrEmpty(model.SeatName) ||
-                string.IsNullOrWhiteSpace(model.SeatName))
-            {
-                throw new TheatreException($"{nameof(model.SeatName)} cannot be blank!");
-            }
-
-            if (model.Price < 0)
-            {
-                throw new TheatreException($"{nameof(model.Price)} cannot be a negative number!");
-            }
-
-            var performance = await _unitOfWork.PerformanceRepository.GetByIdAsync(model.PerformanceId);
-            if (performance is null)
-            {
-                throw new TheatreException($"Performance with this {nameof(model.PerformanceId)} doesn't exist!");
-            }
-
-            if (model.TicketBookingId is not null)
-            {
-                var booking = await _unitOfWork.TicketBookingRepository.GetByIdAsync((int)model.TicketBookingId);
-                if (booking is null)
-                {
-                    throw new TheatreException($"TicketBooking with this {nameof(model.TicketBookingId)} doesn't exist!");
-                }
-            }
         }
     }
 }

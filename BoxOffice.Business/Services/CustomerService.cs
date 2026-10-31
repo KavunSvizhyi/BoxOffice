@@ -22,14 +22,24 @@ namespace BoxOffice.Business.Services
         {
             Validate(model);
 
-            var person = _mapper.Map<Person>(model);
-            await _unitOfWork.PersonRepository.AddAsync(person);
-            await _unitOfWork.SaveAsync();
-
+            var person = await _unitOfWork.PersonRepository.GetByEmailAsync(model.Email);
             var customer = _mapper.Map<Customer>(model);
-            customer.PersonId = person.Id;
-            await _unitOfWork.CustomerRepository.AddAsync(customer);
 
+            if (person is null)
+            {
+                customer.Person = _mapper.Map<Person>(model);
+            }
+            else
+            {
+                bool isPersonAlreadyCustomer = await _unitOfWork.CustomerRepository.ExistsByPersonId(person.Id);
+                if (isPersonAlreadyCustomer)
+                {
+                    throw new TheatreException("The customer with this email is already in Database!");
+                }
+                customer.PersonId = person.Id;
+            }
+
+            await _unitOfWork.CustomerRepository.AddAsync(customer);
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<CustomerModel>(customer);
@@ -38,12 +48,20 @@ namespace BoxOffice.Business.Services
         public async Task DeleteAsync(int id)
         {
             var customer = await _unitOfWork.CustomerRepository.GetByIdAsync(id);
-            if (customer is not null)
+            if (customer is null)
             {
-                await _unitOfWork.CustomerRepository.DeleteByIdAsync(id);
-                await _unitOfWork.PersonRepository.DeleteByIdAsync(customer.PersonId);
-                await _unitOfWork.SaveAsync();
+                throw new TheatreException($"There is no such ID as {id}!");
             }
+
+            _unitOfWork.CustomerRepository.Delete(customer);
+
+            bool isPersonStillRegirested = await _unitOfWork.AuthorRepository.ExistsByPersonId(customer.PersonId);
+            if (!isPersonStillRegirested)
+            {
+                await _unitOfWork.PersonRepository.DeleteByIdAsync(customer.PersonId);
+            }
+
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<CustomerModel>> GetAllAsync()
@@ -73,8 +91,8 @@ namespace BoxOffice.Business.Services
             customer.Person.FirstName = model.FirstName;
             customer.Person.LastName = model.LastName;
             customer.Person.BirthDate = model.BirthDate;
+            customer.Person.Email = model.Email;
 
-            _unitOfWork.PersonRepository.Update(customer.Person);
             await _unitOfWork.SaveAsync();
         }
 

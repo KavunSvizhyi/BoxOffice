@@ -1,9 +1,7 @@
-﻿namespace BoxOffice.DTO
+﻿namespace BoxOffice.DTO.AddRequest
 {
-    public class TicketPostResponse
+    public class AddTicketRequest
     {
-        public int Id { get; set; }
-
         public string SeatName { get; set; } = null!;
 
         public int PerformanceId { get; set; }

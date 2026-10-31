@@ -14,6 +14,9 @@ namespace BoxOffice.Data.Entities
         [StringLength(30)]
         public string LastName { get; set; } = null!;
 
+        [EmailAddress]
+        public string Email { get; set; } = null!;
+
         [DataType(DataType.DateTime)]
         public DateTime BirthDate { get; set; }
     }
