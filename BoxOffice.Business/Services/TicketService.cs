@@ -223,7 +223,7 @@ namespace BoxOffice.Business.Services
         {
             await ValidateAsync(model);
 
-            var ticket = await _unitOfWork.TicketRepository.GetByIdWithDetailsAsync(model.Id);
+            var ticket = await _unitOfWork.TicketRepository.GetByIdAsync(model.Id);
             if (ticket is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
@@ -233,7 +233,6 @@ namespace BoxOffice.Business.Services
             ticket.PerformanceId = model.PerformanceId;
             ticket.SeatName = model.SeatName;
 
-            _unitOfWork.TicketRepository.Update(ticket);
             await _unitOfWork.SaveAsync();
         }
     }
