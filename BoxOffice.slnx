@@ -3,5 +3,6 @@
   <Project Path="BoxOffice.Business/BoxOffice.Business.csproj" Id="a7cf3ce9-a8b1-4a7f-b3bf-b623b2acb8a5" />
   <Project Path="BoxOffice.Data.Test/BoxOffice.Data.Test.csproj" Id="04c24c54-2c18-4777-b70d-cdcbae362495" />
   <Project Path="BoxOffice.Data/BoxOffice.Data.csproj" />
-  <Project Path="BoxOffice/BoxOffice.csproj" />
+  <Project Path="BoxOffice.WebApi.Test/BoxOffice.WebApi.Test.csproj" Id="aedb95f5-38a1-4c6c-bbbe-e644a044954d" />
+  <Project Path="BoxOffice/BoxOffice.WebApi.csproj" />
 </Solution>
