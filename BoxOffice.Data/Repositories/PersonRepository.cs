@@ -43,7 +43,7 @@ namespace BoxOffice.Data.Repositories
 
         public async Task<Person?> GetByEmailAsync(string email)
         {
-            return await _people.AsNoTracking().FirstOrDefaultAsync(p => p.Email == email);
+            return await _people.FirstOrDefaultAsync(p => p.Email == email);
         }
 
         public async Task<Person?> GetByIdAsync(int id)
