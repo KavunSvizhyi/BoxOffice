@@ -66,8 +66,9 @@ namespace BoxOffice.Business.Services
 
         public async Task<IEnumerable<PerformanceModel>> GetAllAvailablePerformancesAsync()
         {
-            var performances = (await _unitOfWork.PerformanceRepository.GetAllAsync())
-                .Where(p => p.EventDate > DateTime.Now);
+            var performances = (await _unitOfWork.PerformanceRepository.GetAllWithDetailsAsync())
+                .Where(p => p.EventDate > DateTime.Now &&
+                            p.Tickets.Any(t => t.TicketBooking is null));
 
             return _mapper.Map<IEnumerable<PerformanceModel>>(performances);
         }
