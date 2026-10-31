@@ -125,7 +125,7 @@ namespace BoxOffice.Business.Services
             await _unitOfWork.SaveAsync();
         }
 
-        private static void ValidateSellingTheTicket(int id, Ticket ticket)
+        private void ValidateSellingTheTicket(int id, Ticket ticket)
         {
             if (ticket.Performance.EventDate < DateTime.Now)
             {
@@ -143,15 +143,26 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
+            var ticket = await ValidateDeletionAsync(id);
+
+            _unitOfWork.TicketRepository.Delete(ticket);
+            await _unitOfWork.SaveAsync();
+        }
+
+        private async Task<Ticket> ValidateDeletionAsync(int id)
+        {
             var ticket = await _unitOfWork.TicketRepository.GetByIdWithDetailsAsync(id);
-            if (ticket is not null &&
-                ticket.TicketBooking is not null)
+
+            if (ticket is null)
+            {
+                throw new TheatreException($"There is no such ID as {id}!");
+            }
+            if (ticket.TicketBooking is not null)
             {
                 throw new TheatreException($"Cannot delete a booked ticket (ID = {id})!");
             }
 
-            await _unitOfWork.TicketRepository.DeleteByIdAsync(id);
-            await _unitOfWork.SaveAsync();
+            return ticket;
         }
 
         public async Task<IEnumerable<TicketModel>> GetAllAsync()

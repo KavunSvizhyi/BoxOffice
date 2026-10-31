@@ -58,11 +58,11 @@ namespace BoxOffice.Business.Services
         {
             var performance = await ValidateDeletionAsync(id);
 
-            _unitOfWork.PerformanceRepository.Delete(performance!);
+            _unitOfWork.PerformanceRepository.Delete(performance);
             await _unitOfWork.SaveAsync();
         }
 
-        private async Task<Performance?> ValidateDeletionAsync(int id)
+        private async Task<Performance> ValidateDeletionAsync(int id)
         {
             var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(id);
 
