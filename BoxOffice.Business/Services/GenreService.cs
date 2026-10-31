@@ -32,6 +32,15 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<GenreModel>(genre);
         }
 
+        private static void Validate(GenreModel model)
+        {
+            if (string.IsNullOrEmpty(model.GenreName) ||
+                string.IsNullOrWhiteSpace(model.GenreName))
+            {
+                throw new TheatreException($"{nameof(model.GenreName)} cannot be blank!");
+            }
+        }
+
         public async Task DeleteAsync(int id)
         {
             await ValidateDeletion(id);
@@ -74,7 +83,7 @@ namespace BoxOffice.Business.Services
         {
             Validate(model);
 
-            var genre = await _unitOfWork.GenreRepository.GetByIdWithDetailsAsync(model.Id);
+            var genre = await _unitOfWork.GenreRepository.GetByIdAsync(model.Id);
             if (genre is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
@@ -82,17 +91,8 @@ namespace BoxOffice.Business.Services
 
             genre.GenreName = model.GenreName;
 
-            _unitOfWork.GenreRepository.Update(genre);
             await _unitOfWork.SaveAsync();
         }
 
-        private static void Validate(GenreModel model)
-        {
-            if (string.IsNullOrEmpty(model.GenreName) ||
-                string.IsNullOrWhiteSpace(model.GenreName))
-            {
-                throw new TheatreException($"{nameof(model.GenreName)} cannot be blank!");
-            }
-        }
     }
 }
