@@ -122,7 +122,7 @@ namespace BoxOffice.Business.Services
         {
             await ValidateAsync(model);
 
-            var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(model.Id);
+            var performance = await _unitOfWork.PerformanceRepository.GetByIdAsync(model.Id);
             if (performance is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
@@ -133,7 +133,6 @@ namespace BoxOffice.Business.Services
             performance.AuthorId = model.AuthorId;
             performance.GenreId = model.GenreId;
 
-            _unitOfWork.PerformanceRepository.Update(performance);
             await _unitOfWork.SaveAsync();
         }
 
