@@ -95,7 +95,6 @@ namespace BoxOffice.Business.Services
             author.Person.LastName = model.LastName;
             author.Person.BirthDate = model.BirthDate;
 
-            _unitOfWork.PersonRepository.Update(author.Person);
             await _unitOfWork.SaveAsync();
         }
 
