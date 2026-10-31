@@ -69,5 +69,10 @@ namespace BoxOffice.Data.Repositories
         {
             _genres.Update(entity);
         }
+
+        public async Task<bool> ExistsByIdAsync(int id)
+        {
+            return await _genres.AnyAsync(x => x.Id == id);
+        }
     }
 }
