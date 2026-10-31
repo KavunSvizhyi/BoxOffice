@@ -234,6 +234,10 @@ namespace BoxOffice.Data.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -246,6 +250,8 @@ namespace BoxOffice.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email");
+
                     b.ToTable("People");
 
                     b.HasData(
@@ -253,6 +259,7 @@ namespace BoxOffice.Data.Migrations
                         {
                             Id = 1,
                             BirthDate = new DateTime(1985, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "williamshakespeare@gmail.com",
                             FirstName = "William",
                             LastName = "Shakespeare"
                         },
@@ -260,13 +267,15 @@ namespace BoxOffice.Data.Migrations
                         {
                             Id = 2,
                             BirthDate = new DateTime(1990, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "antonbulba@gmail.com",
                             FirstName = "Anton",
-                            LastName = "Chekhov"
+                            LastName = "Bulba"
                         },
                         new
                         {
                             Id = 3,
                             BirthDate = new DateTime(1982, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "oscarwilde@gmail.com",
                             FirstName = "Oscar",
                             LastName = "Wilde"
                         },
@@ -274,6 +283,7 @@ namespace BoxOffice.Data.Migrations
                         {
                             Id = 4,
                             BirthDate = new DateTime(1978, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "arthurmiller@gmail.com",
                             FirstName = "Arthur",
                             LastName = "Miller"
                         },
@@ -281,6 +291,7 @@ namespace BoxOffice.Data.Migrations
                         {
                             Id = 5,
                             BirthDate = new DateTime(1995, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "emmajohnson@gmail.com",
                             FirstName = "Emma",
                             LastName = "Johnson"
                         },
@@ -288,6 +299,7 @@ namespace BoxOffice.Data.Migrations
                         {
                             Id = 6,
                             BirthDate = new DateTime(1988, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "jamessmith@gmail.com",
                             FirstName = "James",
                             LastName = "Smith"
                         },
@@ -295,6 +307,7 @@ namespace BoxOffice.Data.Migrations
                         {
                             Id = 7,
                             BirthDate = new DateTime(2000, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "oliviabrown@gmail.com",
                             FirstName = "Olivia",
                             LastName = "Brown"
                         },
@@ -302,6 +315,7 @@ namespace BoxOffice.Data.Migrations
                         {
                             Id = 8,
                             BirthDate = new DateTime(1992, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "danieltaylor@gmail.com",
                             FirstName = "Daniel",
                             LastName = "Taylor"
                         });
@@ -557,13 +571,13 @@ namespace BoxOffice.Data.Migrations
                     b.HasOne("BoxOffice.Data.Entities.Customer", "Customer")
                         .WithMany("TicketBookings")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BoxOffice.Data.Entities.Ticket", "Ticket")
                         .WithOne("TicketBooking")
                         .HasForeignKey("BoxOffice.Data.Entities.TicketBooking", "TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Customer");

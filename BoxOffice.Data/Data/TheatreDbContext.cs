@@ -26,10 +26,18 @@ namespace BoxOffice.Data.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Person>().HasIndex(x => x.Email);
-            modelBuilder.Entity<Author>().HasIndex(x => x.PersonId);
-            modelBuilder.Entity<Customer>().HasIndex(x => x.PersonId);
-            modelBuilder.Entity<Performance>().HasIndex(x => x.GenreId);
 
+            modelBuilder.Entity<TicketBooking>()
+                .HasOne(x => x.Customer)
+                .WithMany(x => x.TicketBookings)
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TicketBooking>()
+                .HasOne(x => x.Ticket)
+                .WithOne(x => x.TicketBooking)
+                .HasForeignKey<TicketBooking>(tb => tb.TicketId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             DirectoryInfo? projectDir = new DirectoryInfo(AppContext.BaseDirectory).Parent?.Parent?.Parent;
             string path = Path.Combine($"{projectDir!.FullName}.Data", "Data", "Dummy Data");
