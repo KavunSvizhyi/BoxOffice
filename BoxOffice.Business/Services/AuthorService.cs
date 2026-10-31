@@ -25,14 +25,24 @@ namespace BoxOffice.Business.Services
         {
             Validate(model);
 
-            var person = _mapper.Map<Person>(model);
-            await _unitOfWork.PersonRepository.AddAsync(person);
-            await _unitOfWork.SaveAsync();
-
+            var person = await _unitOfWork.PersonRepository.GetByEmailAsync(model.Email);
             var author = _mapper.Map<Author>(model);
-            author.PersonId = person.Id;
-            await _unitOfWork.AuthorRepository.AddAsync(author);
 
+            if (person is null)
+            {
+                author.Person = _mapper.Map<Person>(model);
+            }
+            else
+            {
+                bool isPersonAlreadyAuthor = await _unitOfWork.AuthorRepository.ExistsByPersonId(person.Id);
+                if (!isPersonAlreadyAuthor)
+                {
+                    throw new TheatreException("The author with this email is already in database!");
+                }
+                author.PersonId = person.Id;
+            }
+
+            await _unitOfWork.AuthorRepository.AddAsync(author);
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<AuthorModel>(author);
@@ -41,12 +51,20 @@ namespace BoxOffice.Business.Services
         public async Task DeleteAsync(int id)
         {
             var author = await _unitOfWork.AuthorRepository.GetByIdAsync(id);
-            if (author is not null)
+            if (author is null)
             {
-                await _unitOfWork.AuthorRepository.DeleteByIdAsync(id);
-                await _unitOfWork.PersonRepository.DeleteByIdAsync(author.PersonId);
-                await _unitOfWork.SaveAsync();
+                throw new TheatreException($"There is no such ID as {id}!");
             }
+
+            _unitOfWork.AuthorRepository.Delete(author);
+
+            bool isPersonStillRegirested = await _unitOfWork.CustomerRepository.ExistsByPersonId(author.PersonId);
+            if (!isPersonStillRegirested)
+            {
+                await _unitOfWork.PersonRepository.DeleteByIdAsync(author.PersonId);
+            }
+
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<AuthorModel>> GetAllAsync()

@@ -67,11 +67,9 @@ namespace BoxOffice.Data.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<Customer?> GetByPersonId(int personId)
+        public async Task<bool> ExistsByPersonId(int personId)
         {
-            return await _customers
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.PersonId == personId);
+            return await _customers.AnyAsync(x => x.PersonId == personId);
         }
 
         public void Update(Customer entity)
