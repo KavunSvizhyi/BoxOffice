@@ -122,7 +122,6 @@ namespace BoxOffice.Business.Services
 
             ticket.TicketBooking!.IsSold = true;
 
-            _unitOfWork.TicketBookingRepository.Update(ticket.TicketBooking);
             await _unitOfWork.SaveAsync();
         }
 
