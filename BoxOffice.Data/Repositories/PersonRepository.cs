@@ -60,5 +60,10 @@ namespace BoxOffice.Data.Repositories
         {
             return await _people.AnyAsync(x => x.Id == id);
         }
+
+        public async Task<bool> ExistsByEmailAsync(string email)
+        {
+            return await _people.AnyAsync(x => x.Email == email);
+        }
     }
 }
