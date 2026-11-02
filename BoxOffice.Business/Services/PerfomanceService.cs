@@ -34,8 +34,7 @@ namespace BoxOffice.Business.Services
 
         private async Task ValidateAsync(PerformanceModel model)
         {
-            if (string.IsNullOrEmpty(model.PerformanceName) ||
-                string.IsNullOrWhiteSpace(model.PerformanceName))
+            if (string.IsNullOrWhiteSpace(model.PerformanceName))
             {
                 throw new TheatreException($"{nameof(model.PerformanceName)} cannot be blank!");
             }

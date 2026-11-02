@@ -85,11 +85,18 @@ namespace BoxOffice.Business.Services
         {
             Validate(model);
 
+            bool isEmailExistsInDb = await _unitOfWork.PersonRepository.ExistsByEmailAsync(model.Email);
+            if (isEmailExistsInDb)
+            {
+                throw new TheatreException("The this email is already in database!");
+            }
+
             var author = await _unitOfWork.AuthorRepository.GetByIdWithDetailsAsync(model.Id);
             if (author is null)
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
             }
+
 
             author.Person.FirstName = model.FirstName;
             author.Person.LastName = model.LastName;
@@ -101,16 +108,19 @@ namespace BoxOffice.Business.Services
 
         private void Validate(AuthorModel model)
         {
-            if (string.IsNullOrEmpty(model.LastName) ||
-                string.IsNullOrWhiteSpace(model.LastName))
+            if (string.IsNullOrWhiteSpace(model.LastName))
             {
                 throw new TheatreException($"{nameof(model.LastName)} cannot be blank!");
             }
 
-            if (string.IsNullOrEmpty(model.FirstName) ||
-                string.IsNullOrWhiteSpace(model.FirstName))
+            if (string.IsNullOrWhiteSpace(model.FirstName))
             {
                 throw new TheatreException($"{nameof(model.FirstName)} cannot be blank!");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Email))
+            {
+                throw new TheatreException($"{nameof(model.Email)} cannot be blank!");
             }
 
             if (model.BirthDate.Year < 1900 ||
