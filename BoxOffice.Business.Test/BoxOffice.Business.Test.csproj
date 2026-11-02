@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BoxOffice.Business\BoxOffice.Business.csproj" />
+    <ProjectReference Include="..\BoxOffice.Data\BoxOffice.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
