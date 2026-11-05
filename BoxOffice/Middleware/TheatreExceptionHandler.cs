@@ -11,7 +11,7 @@ namespace BoxOffice.Middleware
         {
             var (statusCode, title) = exception switch
             {
-                TheatreException => (StatusCodes.Status400BadRequest, "Bad data"),
+                TheatreException => (StatusCodes.Status400BadRequest, "Bad Request (TheatreExpception handling)"),
                 _ => (StatusCodes.Status500InternalServerError, "Something on the server side")
             };
 

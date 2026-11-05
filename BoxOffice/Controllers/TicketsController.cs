@@ -45,10 +45,10 @@ namespace BoxOffice.Controllers
             return Ok(ticket);
         }
 
-        [HttpGet("available/{performanceId}")]
-        public async Task<ActionResult<IEnumerable<TicketModel>>> GetAvailableByPerformanceId(int performanceId)
+        [HttpGet("available/by-performance/{id}")]
+        public async Task<ActionResult<IEnumerable<TicketModel>>> GetAvailableByPerformanceId(int id)
         {
-            return Ok(await _ticketService.GetAvailableTicketsByPerformanceIdAsync(performanceId));
+            return Ok(await _ticketService.GetAvailableTicketsByPerformanceIdAsync(id));
         }
 
         [HttpGet("bookings/by-customer/{id}")]
@@ -58,7 +58,7 @@ namespace BoxOffice.Controllers
         }
 
         [HttpGet("bookings/by-ticket/{id}")]
-        public async Task<ActionResult<TicketBookingModel?>> GetBookingByTicketId(int id)
+        public async Task<ActionResult<TicketBookingModel>> GetBookingByTicketId(int id)
         {
             var booking = await _ticketService.GetBookingDetailsByTicketIdAsync(id);
 
@@ -123,7 +123,7 @@ namespace BoxOffice.Controllers
             return NoContent();
         }
 
-        [HttpDelete("booking/{id}")]
+        [HttpDelete("bookings/{id}")]
         public async Task<IActionResult> Cancel(int id)
         {
             await _ticketService.CancelBookingAsync(id);

@@ -44,11 +44,16 @@ namespace BoxOffice.Data.Repositories
         public async Task<IEnumerable<Performance>> GetAllWithDetailsAsync()
         {
             return await _performances
-                .AsNoTracking()
                 .Include(x => x.Author)
-                .ThenInclude(x => x!.Person)
+                .   ThenInclude(x => x!.Person)
                 .Include(x => x.Tickets)
-                .ThenInclude(x => x.TicketBooking)
+                    .ThenInclude(x => x.TicketBooking)
+                        .ThenInclude(x => x!.Customer)
+                            .ThenInclude(x => x.Person)
+                .Include(x => x.Tickets)
+                    .ThenInclude(x => x.TicketBooking)
+                        .ThenInclude(x => x!.Customer)
+                            .ThenInclude(x => x.TicketBookings)
                 .ToListAsync();
         }
 
@@ -61,9 +66,15 @@ namespace BoxOffice.Data.Repositories
         {
             return await _performances
                 .Include(x => x.Author)
-                .ThenInclude(x => x!.Person)
+                    .ThenInclude(x => x!.Person)
                 .Include(x => x.Tickets)
-                .ThenInclude(x => x.TicketBooking)
+                    .ThenInclude(x => x.TicketBooking)
+                        .ThenInclude(x => x!.Customer)
+                            .ThenInclude(x => x.Person)
+                .Include(x => x.Tickets)
+                    .ThenInclude(x => x.TicketBooking)
+                        .ThenInclude(x => x!.Customer)
+                            .ThenInclude(x => x.TicketBookings)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

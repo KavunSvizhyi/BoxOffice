@@ -1,9 +1,13 @@
-﻿namespace BoxOffice.DTO.UpdateRequest
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BoxOffice.DTO.UpdateRequest
 {
     public class UpdateGenreRequest
     {
+        [Required]
         public int Id { get; set; }
 
-        public string GenreName { get; set; } = null!;
+        [Required]
+        public string GenreName { get; set; } = string.Empty;
     }
 }

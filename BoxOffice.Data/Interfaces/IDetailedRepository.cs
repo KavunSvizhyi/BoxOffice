@@ -5,9 +5,10 @@ using System.Text;
 
 namespace BoxOffice.Data.Interfaces
 {
-    public interface IDetailedRepository<TEntity> : IRepositoty<TEntity> 
+    public interface IDetailedRepository<TEntity> : IRepositoty<TEntity>
         where TEntity : BaseEntity
     {
+        Task<TEntity?> GetByIdWithDetailsAsync(int id);
         Task<IEnumerable<TEntity>> GetAllWithDetailsAsync();
     }
 }

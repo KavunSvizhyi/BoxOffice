@@ -6,7 +6,7 @@ using System.Text;
 namespace BoxOffice.Data.Interfaces
 {
     public interface IWithPersonRepository<TEntity> 
-        : IDeeplyDetailedRepository<TEntity> 
+        : IDetailedRepository<TEntity> 
         where TEntity : BaseEntity
     {
         Task<bool> ExistsByPersonId(int personId);

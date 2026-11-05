@@ -45,20 +45,43 @@ namespace BoxOffice.Business.Services
             return _mapper.Map<CustomerModel>(customer);
         }
 
+        private void Validate(CustomerModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.LastName))
+            {
+                throw new TheatreException($"{nameof(model.LastName)} cannot be blank!");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.FirstName))
+            {
+                throw new TheatreException($"{nameof(model.FirstName)} cannot be blank!");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Email))
+            {
+                throw new TheatreException($"{nameof(model.Email)} cannot be blank!");
+            }
+
+            if (model.BirthDate.Year < 1900 ||
+                model.BirthDate > DateTime.Now)
+            {
+                throw new TheatreException($"{nameof(model.BirthDate)} is out of the range (The year of 1900 to Now)!");
+            }
+        }
+
         public async Task DeleteAsync(int id)
         {
             var customer = await _unitOfWork.CustomerRepository.GetByIdAsync(id);
-            if (customer is null)
-            {
-                throw new TheatreException($"There is no such ID as {id}!");
-            }
 
-            _unitOfWork.CustomerRepository.Delete(customer);
-
-            bool isPersonStillRegirested = await _unitOfWork.AuthorRepository.ExistsByPersonId(customer.PersonId);
-            if (!isPersonStillRegirested)
+            if (customer  is not null)
             {
-                await _unitOfWork.PersonRepository.DeleteByIdAsync(customer.PersonId);
+                _unitOfWork.CustomerRepository.Delete(customer);
+
+                bool isPersonStillRegirested = await _unitOfWork.AuthorRepository.ExistsByPersonId(customer.PersonId);
+                if (!isPersonStillRegirested)
+                {
+                    await _unitOfWork.PersonRepository.DeleteByIdAsync(customer.PersonId);
+                }
             }
 
             await _unitOfWork.SaveAsync();
@@ -82,6 +105,12 @@ namespace BoxOffice.Business.Services
         {
             Validate(model);
 
+            bool isEmailExistsInDb = await _unitOfWork.PersonRepository.ExistsByEmailAsync(model.Email);
+            if (isEmailExistsInDb)
+            {
+                throw new TheatreException("The this email is already in database!");
+            }
+
             var customer = await _unitOfWork.CustomerRepository.GetByIdWithDetailsAsync(model.Id);
             if (customer is null)
             {
@@ -94,27 +123,6 @@ namespace BoxOffice.Business.Services
             customer.Person.Email = model.Email;
 
             await _unitOfWork.SaveAsync();
-        }
-
-        private void Validate(CustomerModel model)
-        {
-            if (string.IsNullOrEmpty(model.LastName) ||
-                string.IsNullOrWhiteSpace(model.LastName))
-            {
-                throw new TheatreException($"{nameof(model.LastName)} cannot be blank!");
-            }
-
-            if (string.IsNullOrEmpty(model.FirstName) ||
-                string.IsNullOrWhiteSpace(model.FirstName))
-            {
-                throw new TheatreException($"{nameof(model.FirstName)} cannot be blank!");
-            }
-
-            if (model.BirthDate.Year < 1900 ||
-                model.BirthDate > DateTime.Now)
-            {
-                throw new TheatreException($"{nameof(model.BirthDate)} is out of the range (The year of 1900 to Now)!");
-            }
         }
 
         public async Task<IEnumerable<CustomerModel>> GetCustomersByPerformanceIdAsync(int performanceId)

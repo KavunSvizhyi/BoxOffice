@@ -1,13 +1,19 @@
-﻿namespace BoxOffice.DTO.AddRequest
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BoxOffice.DTO.AddRequest
 {
     public class AddPerformanceRequest
     {
-        public string PerformanceName { get; set; } = null!;
+        [Required]
+        public string PerformanceName { get; set; } = string.Empty;
 
+        [Required]
         public int AuthorId { get; set; }
 
+        [Required]
         public int GenreId { get; set; }
 
+        [Required]
         public DateTime EventDate { get; set; }
     }
 }

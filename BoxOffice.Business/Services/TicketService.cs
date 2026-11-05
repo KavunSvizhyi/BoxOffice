@@ -34,8 +34,7 @@ namespace BoxOffice.Business.Services
 
         private async Task ValidateAsync(TicketModel model)
         {
-            if (string.IsNullOrEmpty(model.SeatName) ||
-                string.IsNullOrWhiteSpace(model.SeatName))
+            if (string.IsNullOrWhiteSpace(model.SeatName))
             {
                 throw new TheatreException($"{nameof(model.SeatName)} cannot be blank!");
             }
@@ -49,15 +48,6 @@ namespace BoxOffice.Business.Services
             if (!performanceExists)
             {
                 throw new TheatreException($"Performance with this {nameof(model.PerformanceId)} doesn't exist!");
-            }
-
-            if (model.TicketBookingId is not null)
-            {
-                bool bookingExists = await _unitOfWork.TicketBookingRepository.ExistsByIdAsync((int)model.TicketBookingId);
-                if (bookingExists)
-                {
-                    throw new TheatreException($"TicketBooking with this {nameof(model.TicketBookingId)} doesn't exist!");
-                }
             }
         }
 
@@ -80,10 +70,10 @@ namespace BoxOffice.Business.Services
 
         private async Task ValidateBookingAsync(int id, int customerId)
         {
-            bool ticketExists = await _unitOfWork.TicketRepository.ExistsByIdAsync(id);
+            var ticket = await _unitOfWork.TicketRepository.GetByIdWithDetailsAsync(id);
             bool customerExists = await _unitOfWork.CustomerRepository.ExistsByIdAsync(customerId);
 
-            if (!ticketExists)
+            if (ticket is null)
             {
                 throw new TheatreException($"Ticket with this ID doesn't exist!");
             }
@@ -92,22 +82,30 @@ namespace BoxOffice.Business.Services
             {
                 throw new TheatreException($"Customer with this ID doesn't exist!");
             }
+
+            if (ticket.TicketBooking is not null)
+            {
+                throw new TheatreException($"Ticket with this ID is already booked!");
+            }
         }
 
         public async Task CancelBookingAsync(int ticketBookingId)
+        {
+            var booking = await ValidateCancelingBookingAsync(ticketBookingId);
+
+            _unitOfWork.TicketBookingRepository.Delete(booking);
+            await _unitOfWork.SaveAsync();
+        }
+
+        private async Task<TicketBooking> ValidateCancelingBookingAsync(int ticketBookingId)
         {
             var booking = await _unitOfWork.TicketBookingRepository.GetByIdAsync(ticketBookingId);
             if (booking is null)
             {
                 throw new TheatreException($"There is no such ID as {ticketBookingId}!");
             }
-            if (booking.IsSold)
-            {
-                throw new TheatreException($"Cannot cancel an already sold ticket!");
-            }
 
-            _unitOfWork.TicketBookingRepository.Delete(booking);
-            await _unitOfWork.SaveAsync();
+            return booking;
         }
 
         public async Task ChangeToSoldAsync(int id)
@@ -143,26 +141,14 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
-            var ticket = await ValidateDeletionAsync(id);
-
-            _unitOfWork.TicketRepository.Delete(ticket);
-            await _unitOfWork.SaveAsync();
-        }
-
-        private async Task<Ticket> ValidateDeletionAsync(int id)
-        {
             var ticket = await _unitOfWork.TicketRepository.GetByIdWithDetailsAsync(id);
-
-            if (ticket is null)
-            {
-                throw new TheatreException($"There is no such ID as {id}!");
-            }
-            if (ticket.TicketBooking is not null)
+            if (ticket is not null && ticket.TicketBooking is not null)
             {
                 throw new TheatreException($"Cannot delete a booked ticket (ID = {id})!");
             }
 
-            return ticket;
+            await _unitOfWork.TicketRepository.DeleteByIdAsync(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TicketModel>> GetAllAsync()

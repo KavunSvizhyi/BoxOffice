@@ -1,13 +1,17 @@
-﻿namespace BoxOffice.DTO.AddRequest
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BoxOffice.DTO.AddRequest
 {
     public class AddPersonRequest
     {
-        public string FirstName { get; set; } = null!;
+        public string FirstName { get; set; } = string.Empty;
 
-        public string LastName { get; set; } = null!;
+        public string LastName { get; set; } = string.Empty;
 
         public DateTime BirthDate { get; set; }
 
-        public string Email { get; set; } = null!;
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
     }
 }

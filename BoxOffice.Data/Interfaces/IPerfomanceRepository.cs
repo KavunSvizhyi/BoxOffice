@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoxOffice.Data.Interfaces
 {
-    public interface IPerformanceRepository : IDeeplyDetailedRepository<Performance>
+    public interface IPerformanceRepository : IDetailedRepository<Performance>
     {
         Task<bool> ExistsByGenreIdAsync(int genreId);
     }

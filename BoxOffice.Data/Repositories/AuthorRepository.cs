@@ -47,8 +47,8 @@ namespace BoxOffice.Data.Repositories
                 .AsNoTracking()
                 .Include(x => x.Person)
                 .Include(x => x.Performances)
-                .ThenInclude(x => x.Tickets)
-                .ThenInclude(x => x.TicketBooking)
+                    .ThenInclude(x => x.Tickets)
+                        .ThenInclude(x => x.TicketBooking)
                 .ToListAsync();
         }
 
@@ -62,8 +62,8 @@ namespace BoxOffice.Data.Repositories
             return await _authors
                 .Include(x => x.Person)
                 .Include(x => x.Performances)
-                .ThenInclude(x => x.Tickets)
-                .ThenInclude(x => x.TicketBooking)
+                    .ThenInclude(x => x.Tickets)
+                        .ThenInclude(x => x.TicketBooking)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

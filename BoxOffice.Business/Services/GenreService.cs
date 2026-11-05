@@ -34,8 +34,7 @@ namespace BoxOffice.Business.Services
 
         private static void Validate(GenreModel model)
         {
-            if (string.IsNullOrEmpty(model.GenreName) ||
-                string.IsNullOrWhiteSpace(model.GenreName))
+            if (string.IsNullOrWhiteSpace(model.GenreName))
             {
                 throw new TheatreException($"{nameof(model.GenreName)} cannot be blank!");
             }
@@ -43,26 +42,14 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
-            await ValidateDeletionAsync(id);
-
-            await _unitOfWork.GenreRepository.DeleteByIdAsync(id);
-            await _unitOfWork.SaveAsync();
-        }
-
-        private async Task ValidateDeletionAsync(int id)
-        {
-            bool exists = await _unitOfWork.GenreRepository.ExistsByIdAsync(id);
-            if (!exists)
-            {
-                throw new TheatreException($"There is no such ID as {id}!");
-            }
-
             bool isAnyPerformanceByGenre = await _unitOfWork.PerformanceRepository.ExistsByGenreIdAsync(id);
-
             if (isAnyPerformanceByGenre)
             {
                 throw new TheatreException("Cannot delete the genre until a performance with it exists!");
             }
+
+            await _unitOfWork.GenreRepository.DeleteByIdAsync(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<GenreModel>> GetAllAsync()
