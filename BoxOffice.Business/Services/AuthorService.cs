@@ -88,7 +88,7 @@ namespace BoxOffice.Business.Services
             bool isEmailExistsInDb = await _unitOfWork.PersonRepository.ExistsByEmailAsync(model.Email);
             if (isEmailExistsInDb)
             {
-                throw new TheatreException("The this email is already in database!");
+                throw new TheatreException("This email is already in database!");
             }
 
             var author = await _unitOfWork.AuthorRepository.GetByIdWithDetailsAsync(model.Id);
@@ -96,7 +96,6 @@ namespace BoxOffice.Business.Services
             {
                 throw new TheatreException($"There is no such ID as {model.Id}!");
             }
-
 
             author.Person.FirstName = model.FirstName;
             author.Person.LastName = model.LastName;

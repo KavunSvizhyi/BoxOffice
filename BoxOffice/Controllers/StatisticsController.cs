@@ -43,7 +43,7 @@ namespace BoxOffice.Controllers
         {
             if (startDate > endDate)
             {
-                return BadRequest($"{nameof(startDate)} cannot be after {endDate}!");
+                return BadRequest($"{nameof(startDate)} cannot be after {nameof(endDate)}!");
             }
 
             return Ok(await _statisticService.GetIncomeOfGenreInPeriodAsync(genreId, startDate, endDate));

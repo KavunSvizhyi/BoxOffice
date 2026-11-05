@@ -44,7 +44,7 @@ namespace BoxOffice.Controllers
         }
 
         [HttpGet("by-filter")]
-        public async Task<ActionResult<IEnumerable<PerformanceModel>>> Get(SearchFilterModel filter)
+        public async Task<ActionResult<IEnumerable<PerformanceModel>>> Get([FromQuery] SearchFilterModel filter)
         {
             return Ok(await _performanceService.GetByFilterAsync(filter));
         }

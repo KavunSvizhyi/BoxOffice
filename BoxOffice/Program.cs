@@ -6,6 +6,7 @@ using BoxOffice.Data.Data;
 using BoxOffice.Data.Entities;
 using BoxOffice.Data.Interfaces;
 using BoxOffice.Middleware;
+using BoxOffice.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,8 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<WebApiLayerProfile>();
 });
 
+builder.Services.AddTransient<DataSeeder>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -42,6 +45,17 @@ app.UseHsts();
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
+if (app.Environment.IsEnvironment("Test"))
+{
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    var context = scope.ServiceProvider.GetRequiredService<TheatreDbContext>();
+
+    context.Database.EnsureDeleted();
+    context.Database.EnsureCreated();
+
+    seeder.Seed(context);
+}
 
 app.MapControllers();
 
@@ -49,3 +63,5 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.Run();
+
+public partial class Program { }
