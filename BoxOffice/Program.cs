@@ -45,17 +45,6 @@ app.UseHsts();
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
-if (app.Environment.IsEnvironment("Test"))
-{
-    using var scope = app.Services.CreateScope();
-    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-    var context = scope.ServiceProvider.GetRequiredService<TheatreDbContext>();
-
-    context.Database.EnsureDeleted();
-    context.Database.EnsureCreated();
-
-    seeder.Seed(context);
-}
 
 app.MapControllers();
 
