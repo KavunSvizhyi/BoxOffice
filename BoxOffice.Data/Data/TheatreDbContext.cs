@@ -25,7 +25,7 @@ namespace BoxOffice.Data.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Person>().HasIndex(x => x.Email);
+            modelBuilder.Entity<Person>().HasIndex(x => x.Email).IsUnique();
 
             modelBuilder.Entity<TicketBooking>()
                 .HasOne(x => x.Customer)

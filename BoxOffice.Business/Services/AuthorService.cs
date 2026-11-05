@@ -51,17 +51,16 @@ namespace BoxOffice.Business.Services
         public async Task DeleteAsync(int id)
         {
             var author = await _unitOfWork.AuthorRepository.GetByIdAsync(id);
-            if (author is null)
-            {
-                throw new TheatreException($"There is no such ID as {id}!");
-            }
 
-            _unitOfWork.AuthorRepository.Delete(author);
-
-            bool isPersonStillRegirested = await _unitOfWork.CustomerRepository.ExistsByPersonId(author.PersonId);
-            if (!isPersonStillRegirested)
+            if (author is not null)
             {
-                await _unitOfWork.PersonRepository.DeleteByIdAsync(author.PersonId);
+                _unitOfWork.AuthorRepository.Delete(author);
+
+                bool isPersonStillRegirested = await _unitOfWork.AuthorRepository.ExistsByPersonId(author.PersonId);
+                if (!isPersonStillRegirested)
+                {
+                    await _unitOfWork.PersonRepository.DeleteByIdAsync(author.PersonId);
+                }
             }
 
             await _unitOfWork.SaveAsync();

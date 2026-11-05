@@ -104,10 +104,6 @@ namespace BoxOffice.Business.Services
             {
                 throw new TheatreException($"There is no such ID as {ticketBookingId}!");
             }
-            if (booking.IsSold)
-            {
-                throw new TheatreException($"Cannot cancel an already sold ticket!");
-            }
 
             return booking;
         }
@@ -145,26 +141,14 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
-            var ticket = await ValidateDeletionAsync(id);
-
-            _unitOfWork.TicketRepository.Delete(ticket);
-            await _unitOfWork.SaveAsync();
-        }
-
-        private async Task<Ticket> ValidateDeletionAsync(int id)
-        {
             var ticket = await _unitOfWork.TicketRepository.GetByIdWithDetailsAsync(id);
-
-            if (ticket is null)
-            {
-                throw new TheatreException($"There is no such ID as {id}!");
-            }
-            if (ticket.TicketBooking is not null)
+            if (ticket is not null && ticket.TicketBooking is not null)
             {
                 throw new TheatreException($"Cannot delete a booked ticket (ID = {id})!");
             }
 
-            return ticket;
+            await _unitOfWork.TicketRepository.DeleteByIdAsync(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<TicketModel>> GetAllAsync()

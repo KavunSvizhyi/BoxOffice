@@ -38,28 +38,6 @@ namespace BoxOffice.Data.Migrations
                     b.HasIndex("PersonId");
 
                     b.ToTable("Authors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            PersonId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            PersonId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            PersonId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            PersonId = 4
-                        });
                 });
 
             modelBuilder.Entity("BoxOffice.Data.Entities.Customer", b =>
@@ -78,28 +56,6 @@ namespace BoxOffice.Data.Migrations
                     b.HasIndex("PersonId");
 
                     b.ToTable("Customers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            PersonId = 5
-                        },
-                        new
-                        {
-                            Id = 2,
-                            PersonId = 6
-                        },
-                        new
-                        {
-                            Id = 3,
-                            PersonId = 7
-                        },
-                        new
-                        {
-                            Id = 4,
-                            PersonId = 8
-                        });
                 });
 
             modelBuilder.Entity("BoxOffice.Data.Entities.Genre", b =>
@@ -118,28 +74,6 @@ namespace BoxOffice.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            GenreName = "Drama"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            GenreName = "Comedy"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            GenreName = "Musical"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            GenreName = "Tragedy"
-                        });
                 });
 
             modelBuilder.Entity("BoxOffice.Data.Entities.Performance", b =>
@@ -171,56 +105,6 @@ namespace BoxOffice.Data.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("Performances");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AuthorId = 1,
-                            EventDate = new DateTime(2026, 11, 5, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 4,
-                            PerformanceName = "Hamlet"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AuthorId = 2,
-                            EventDate = new DateTime(2026, 11, 12, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 1,
-                            PerformanceName = "The Cherry Orchard"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AuthorId = 3,
-                            EventDate = new DateTime(2026, 11, 20, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 2,
-                            PerformanceName = "The Importance of Being Earnest"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AuthorId = 4,
-                            EventDate = new DateTime(2026, 12, 1, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 1,
-                            PerformanceName = "Death of a Salesman"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AuthorId = 1,
-                            EventDate = new DateTime(2026, 12, 10, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 2,
-                            PerformanceName = "A Midsummer Night's Dream"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AuthorId = 4,
-                            EventDate = new DateTime(2026, 12, 18, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 4,
-                            PerformanceName = "The Crucible"
-                        });
                 });
 
             modelBuilder.Entity("BoxOffice.Data.Entities.Person", b =>
@@ -250,75 +134,10 @@ namespace BoxOffice.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("People");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BirthDate = new DateTime(1985, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "williamshakespeare@gmail.com",
-                            FirstName = "William",
-                            LastName = "Shakespeare"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BirthDate = new DateTime(1990, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "antonbulba@gmail.com",
-                            FirstName = "Anton",
-                            LastName = "Bulba"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BirthDate = new DateTime(1982, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "oscarwilde@gmail.com",
-                            FirstName = "Oscar",
-                            LastName = "Wilde"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BirthDate = new DateTime(1978, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "arthurmiller@gmail.com",
-                            FirstName = "Arthur",
-                            LastName = "Miller"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            BirthDate = new DateTime(1995, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "emmajohnson@gmail.com",
-                            FirstName = "Emma",
-                            LastName = "Johnson"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            BirthDate = new DateTime(1988, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "jamessmith@gmail.com",
-                            FirstName = "James",
-                            LastName = "Smith"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            BirthDate = new DateTime(2000, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "oliviabrown@gmail.com",
-                            FirstName = "Olivia",
-                            LastName = "Brown"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            BirthDate = new DateTime(1992, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "danieltaylor@gmail.com",
-                            FirstName = "Daniel",
-                            LastName = "Taylor"
-                        });
                 });
 
             modelBuilder.Entity("BoxOffice.Data.Entities.Ticket", b =>
@@ -346,92 +165,6 @@ namespace BoxOffice.Data.Migrations
                     b.HasIndex("PerformanceId");
 
                     b.ToTable("Tickets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            PerformanceId = 1,
-                            Price = 250m,
-                            SeatName = "A1"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            PerformanceId = 1,
-                            Price = 350m,
-                            SeatName = "B4"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            PerformanceId = 2,
-                            Price = 400m,
-                            SeatName = "A2"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            PerformanceId = 2,
-                            Price = 500m,
-                            SeatName = "B5"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            PerformanceId = 3,
-                            Price = 300m,
-                            SeatName = "A3"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            PerformanceId = 3,
-                            Price = 400m,
-                            SeatName = "B6"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            PerformanceId = 4,
-                            Price = 450m,
-                            SeatName = "A4"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            PerformanceId = 4,
-                            Price = 550m,
-                            SeatName = "B7"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            PerformanceId = 5,
-                            Price = 350m,
-                            SeatName = "A5"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            PerformanceId = 5,
-                            Price = 450m,
-                            SeatName = "B8"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            PerformanceId = 6,
-                            Price = 500m,
-                            SeatName = "A6"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            PerformanceId = 6,
-                            Price = 600m,
-                            SeatName = "B9"
-                        });
                 });
 
             modelBuilder.Entity("BoxOffice.Data.Entities.TicketBooking", b =>
@@ -462,56 +195,6 @@ namespace BoxOffice.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("TicketBookings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CustomerId = 1,
-                            IsSold = true,
-                            OperationDate = new DateTime(2026, 10, 20, 12, 15, 0, 0, DateTimeKind.Unspecified),
-                            TicketId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CustomerId = 2,
-                            IsSold = true,
-                            OperationDate = new DateTime(2026, 10, 21, 9, 40, 0, 0, DateTimeKind.Unspecified),
-                            TicketId = 3
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CustomerId = 3,
-                            IsSold = false,
-                            OperationDate = new DateTime(2026, 10, 22, 16, 5, 0, 0, DateTimeKind.Unspecified),
-                            TicketId = 4
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CustomerId = 4,
-                            IsSold = true,
-                            OperationDate = new DateTime(2026, 10, 23, 11, 20, 0, 0, DateTimeKind.Unspecified),
-                            TicketId = 6
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CustomerId = 1,
-                            IsSold = false,
-                            OperationDate = new DateTime(2026, 10, 25, 18, 45, 0, 0, DateTimeKind.Unspecified),
-                            TicketId = 8
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CustomerId = 2,
-                            IsSold = true,
-                            OperationDate = new DateTime(2026, 10, 27, 14, 10, 0, 0, DateTimeKind.Unspecified),
-                            TicketId = 11
-                        });
                 });
 
             modelBuilder.Entity("BoxOffice.Data.Entities.Author", b =>

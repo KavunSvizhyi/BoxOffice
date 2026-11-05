@@ -271,19 +271,6 @@ namespace BoxOffice.Business.Test
         }
 
         [Fact]
-        public async Task DeleteAsync_InvalidId()
-        {
-            int testId = _fixture.Create<int>();
-
-            _unitOfWorkMock.Setup(u => u.TicketRepository.GetByIdAsync(It.IsAny<int>()))
-                .ReturnsAsync(null as Ticket);
-
-            Func<Task> actual = async () => await _ticketService.DeleteAsync(testId);
-
-            await actual.Should().ThrowAsync<TheatreException>();
-        }
-
-        [Fact]
         public async Task DeleteAsync_AlreadyBooked()
         {
             var data = _fixture.Build<Ticket>()
@@ -294,7 +281,7 @@ namespace BoxOffice.Business.Test
                                                                    .Create())
                                .Create();
 
-            _unitOfWorkMock.Setup(u => u.TicketRepository.GetByIdAsync(It.IsAny<int>()))
+            _unitOfWorkMock.Setup(u => u.TicketRepository.GetByIdWithDetailsAsync(It.IsAny<int>()))
                 .ReturnsAsync(data);
 
             Func<Task> actual = async () => await _ticketService.DeleteAsync(data.Id);
@@ -412,23 +399,6 @@ namespace BoxOffice.Business.Test
                 .ReturnsAsync(null as TicketBooking);
 
             Func<Task> actual = async () => await _ticketService.CancelBookingAsync(testId);
-
-            await actual.Should().ThrowAsync<TheatreException>();
-        }
-
-        [Fact]
-        public async Task CancelBookingAsync_TicketIsSold()
-        {
-            var data = _fixture.Build<TicketBooking>()
-                               .Without(x => x.Customer)
-                               .Without(x => x.Ticket)
-                               .With(x => x.IsSold, true)
-                               .Create();
-
-            _unitOfWorkMock.Setup(u => u.TicketBookingRepository.GetByIdAsync(It.IsAny<int>()))
-                .ReturnsAsync(data);
-
-            Func<Task> actual = async () => await _ticketService.CancelBookingAsync(data.Id);
 
             await actual.Should().ThrowAsync<TheatreException>();
         }

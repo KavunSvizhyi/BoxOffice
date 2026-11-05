@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoxOffice.Data.Interfaces
 {
-    public interface ITicketRepository : IDeeplyDetailedRepository<Ticket>
+    public interface ITicketRepository : IDetailedRepository<Ticket>
     {
     }
 }

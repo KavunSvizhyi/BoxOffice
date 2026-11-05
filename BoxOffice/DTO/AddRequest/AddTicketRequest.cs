@@ -1,11 +1,16 @@
-﻿namespace BoxOffice.DTO.AddRequest
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BoxOffice.DTO.AddRequest
 {
     public class AddTicketRequest
     {
-        public string SeatName { get; set; } = null!;
+        [Required]
+        public string SeatName { get; set; } = string.Empty;
 
+        [Required]
         public int PerformanceId { get; set; }
 
+        [Required]
         public decimal Price { get; set; }
     }
 }

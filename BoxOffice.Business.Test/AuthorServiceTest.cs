@@ -341,19 +341,6 @@ namespace BoxOffice.Business.Test
 
             await actual.Should().NotThrowAsync<TheatreException>();
         }
-
-        [Fact]
-        public async Task DeleteAsync_InvalidId()
-        {
-            int testId = _fixture.Create<int>();
-
-            _unitOfWorkMock.Setup(u => u.AuthorRepository.GetByIdAsync(It.IsAny<int>()))
-                .ReturnsAsync(null as Author);
-
-            Func<Task> actual = async () => await _authorService.DeleteAsync(testId);
-
-            await actual.Should().ThrowAsync<TheatreException>();
-        }
         #endregion
     }
 }

@@ -289,19 +289,6 @@ namespace BoxOffice.Business.Test
         }
 
         [Fact]
-        public async Task DeleteAsync_InvalidId()
-        {
-            int testId = _fixture.Create<int>();
-
-            _unitOfWorkMock.Setup(u => u.PerformanceRepository.GetByIdAsync(It.IsAny<int>()))
-                .ReturnsAsync(null as Performance);
-
-            Func<Task> actual = async () => await _performanceService.DeleteAsync(testId);
-
-            await actual.Should().ThrowAsync<TheatreException>();
-        }
-
-        [Fact]
         public async Task DeleteAsync_TicketsAreAvailable()
         {
             var data = _fixture.Build<Performance>()
@@ -313,7 +300,7 @@ namespace BoxOffice.Business.Test
                                .Without(x => x.Author)
                                .Create();
 
-            _unitOfWorkMock.Setup(u => u.PerformanceRepository.GetByIdAsync(It.IsAny<int>()))
+            _unitOfWorkMock.Setup(u => u.PerformanceRepository.GetByIdWithDetailsAsync(It.IsAny<int>()))
                 .ReturnsAsync(data);
 
             Func<Task> actual = async () => await _performanceService.DeleteAsync(data.Id);

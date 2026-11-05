@@ -55,27 +55,15 @@ namespace BoxOffice.Business.Services
 
         public async Task DeleteAsync(int id)
         {
-            var performance = await ValidateDeletionAsync(id);
-
-            _unitOfWork.PerformanceRepository.Delete(performance);
-            await _unitOfWork.SaveAsync();
-        }
-
-        private async Task<Performance> ValidateDeletionAsync(int id)
-        {
             var performance = await _unitOfWork.PerformanceRepository.GetByIdWithDetailsAsync(id);
 
-            if (performance is null)
-            {
-                throw new TheatreException($"There is no such ID as {id}!");
-            }
-
-            if (performance.Tickets.Count > 0)
+            if (performance is not null && performance.Tickets.Count > 0)
             {
                 throw new TheatreException($"Cannot delete the performance until tickets to it exist (ID = {id})!");
             }
 
-            return performance;
+            await _unitOfWork.PerformanceRepository.DeleteByIdAsync(id);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<IEnumerable<PerformanceModel>> GetAllAsync()
